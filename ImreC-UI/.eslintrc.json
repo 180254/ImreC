@@ -1,0 +1,29 @@
+{
+  "extends": "eslint:recommended",
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "rules": {
+    "no-console": 0,
+    "strict": [
+      "error",
+      "global"
+    ],
+    "no-unused-vars": [
+      "error",
+      {
+        "vars": "all",
+        "args": "none"
+      }
+    ],
+    "quotes": [
+      "error",
+      "single",
+      {
+        "avoidEscape": true,
+        "allowTemplateLiterals": true
+      }
+    ]
+  }
+}
