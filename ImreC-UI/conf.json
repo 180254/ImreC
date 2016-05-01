@@ -1,0 +1,19 @@
+{
+  "SQS": "https://sqs.us-west-2.amazonaws.com/079592274660/Imrec-SQS",
+  "S3": {
+    "URL": "https://imrec-bucket.s3-us-west-2.amazonaws.com/",
+    "Policy": {
+      "expiration": {"day": 1},
+      "conditions": [
+        ["starts-with", "$key", ""],
+        {"bucket": "imrec-bucket"},
+        {"acl": "public-read"},
+        {"success_action_redirect": "/submitted"},
+        ["content-length-range", 0, 5242880],
+        ["starts-with", "$x-amz-meta-uploaded-by", ""],
+        ["starts-with", "$x-amz-meta-filename", ""],
+        ["starts-with", "$x-amz-meta-task", ""]
+      ]
+    }
+  }
+}

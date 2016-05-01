@@ -1,5 +1,11 @@
-extends layout
-
-block content
-  h1= title
-  p Welcome to #{title}
+doctype html
+html(lang="en")
+    head
+        title="ImreC"
+    body
+        form(action=s3url, method="post", enctype="multipart/form-data")
+            each key in s3fields
+                input(type="hidden" name=key.name, value=key.value)
+            input(type="text" name="x-amz-meta-task")
+            input(type="file" name="file")
+            input(type="submit" name="submit" value="Submit")
