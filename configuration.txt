@@ -1,0 +1,20 @@
+ImreC-Cc -- app1 (commission collector)
+ImreC-Wr -- app2 (worker)
+
+0.1 Add config.json (accessKeyId, secretAccessKey, region) to ImreC-Cc\
+0.2 Add config.json (accessKeyId, secretAccessKey, region) to ImreC-Wr\
+
+1. Create SimpleDB domain.
+1.1 Set that name in ImreC-Cc\conf.json
+1.2 Set that name in ImreC-Wr\conf.json
+
+2. Create SQS.
+2.1 Set that url in ImreC-Cc\conf.json
+2.2 Set that url in ImreC-Wr\conf.json
+
+3. Create S3 bucket.
+3.1 Set bucket file deletion policy in AWS console.
+3.2 Set that name in ImreC-Cc\conf.json
+3.3 Set that name in ImreC-Wr\conf.json
+3.4 Set that url in ImreC-Cc\conf.json
+3.5 Set that url in ImreC-Wr\conf.json
