@@ -1,5 +1,6 @@
 package p.lodz.pl.adi.utils;
 
+import com.amazonaws.AmazonClientException;
 import com.amazonaws.services.devicefarm.model.ArgumentException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
@@ -72,6 +73,9 @@ public class ResizeTask implements Runnable {
 
             deleteObject(itemName);
             deleteMessage();
+
+        } catch (AmazonClientException ex) {
+            logger.log("AMAZON_CLIENT_EXCEPTION", ex.toString());
         }
     }
 

@@ -1,5 +1,6 @@
 package p.lodz.pl.adi.utils;
 
+import com.amazonaws.AmazonClientException;
 import com.amazonaws.services.simpledb.AmazonSimpleDBAsync;
 import com.amazonaws.services.simpledb.model.PutAttributesRequest;
 import com.amazonaws.services.simpledb.model.ReplaceableAttribute;
@@ -23,7 +24,11 @@ public class Logger {
     }
 
     public void log(String action, String message) {
-        logInternal(true, action, message);
+        try {
+            logInternal(true, action, message);
+
+        } catch (AmazonClientException ignored) {
+        }
     }
 
     public void log2(String action, String message) {
