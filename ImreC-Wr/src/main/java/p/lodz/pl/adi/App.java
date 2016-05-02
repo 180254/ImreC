@@ -4,6 +4,8 @@ import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.regions.Region;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.simpledb.AmazonSimpleDB;
+import com.amazonaws.services.simpledb.AmazonSimpleDBClient;
 import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.AmazonSQSClient;
 import com.amazonaws.services.sqs.model.Message;
@@ -11,18 +13,19 @@ import com.amazonaws.services.sqs.model.ReceiveMessageRequest;
 import p.lodz.pl.adi.config.CoProvider;
 import p.lodz.pl.adi.config.Conf;
 import p.lodz.pl.adi.config.Config;
-import p.lodz.pl.adi.utils.ImageResizer;
+import p.lodz.pl.adi.utils.Logger;
 import p.lodz.pl.adi.utils.ResizeTask;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 public class App {
+
+    public Logger logger;
+
     private Conf conf;
     private AmazonSQS sqs;
     private AmazonS3 s3;
-
-    private ImageResizer ir;
 
     public App() throws IOException {
         conf = CoProvider.getConf();
@@ -37,9 +40,10 @@ public class App {
         s3 = new AmazonS3Client(awsCredentials);
         sqs.setRegion(awsRegion);
 
-        ir = new ImageResizer();
+        AmazonSimpleDB sdb = new AmazonSimpleDBClient(awsCredentials);
+        sdb.setRegion(awsRegion);
+        logger = new Logger(conf, sdb);
     }
-
 
     public static void main(String[] args) throws IOException, InterruptedException {
         App app = new App();
@@ -52,8 +56,7 @@ public class App {
         //noinspection InfiniteLoopStatement
         do {
             for (Message message : app.sqs.receiveMessage(request).getMessages()) {
-                System.out.println(message.getBody());
-                new ResizeTask(message, app.conf, app.sqs, app.s3).run();
+                new ResizeTask(message, app.logger, app.conf, app.sqs, app.s3).run();
             }
 
             TimeUnit.SECONDS.sleep(20);

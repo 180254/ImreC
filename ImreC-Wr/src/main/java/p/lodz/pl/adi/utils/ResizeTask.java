@@ -17,6 +17,7 @@ import java.io.InputStream;
 public class ResizeTask implements Runnable {
 
     private Message message;
+    private Logger logger;
 
     private Conf conf;
     private AmazonSQS sqs;
@@ -24,8 +25,9 @@ public class ResizeTask implements Runnable {
 
     private ImageResizer ir = new ImageResizer();
 
-    public ResizeTask(Message message, Conf conf, AmazonSQS sqs, AmazonS3 s3) {
+    public ResizeTask(Message message, Logger logger, Conf conf, AmazonSQS sqs, AmazonS3 s3) {
         this.message = message;
+        this.logger = logger;
         this.conf = conf;
         this.sqs = sqs;
         this.s3 = s3;
@@ -33,6 +35,8 @@ public class ResizeTask implements Runnable {
 
     @Override
     public void run() {
+        logger.log("MESSAGE_PROC_START", message.getBody());
+
         String itemName = message.getBody();
         S3Object itemObject = getObject(itemName);
         ObjectMetadata metadata = itemObject.getObjectMetadata();
@@ -43,6 +47,7 @@ public class ResizeTask implements Runnable {
             String workStatus = ensureNotNull(metadata.getUserMetaDataOf(Meta.WORK_STATUS), Meta.WORK_STATUS);
 
             if (!workStatus.equals(WorkStatus.SCHEDULED)) {
+                logger.log("MESSAGE_PROC_STOP", message.getBody() + "/" + "Not scheduled.");
                 return;
             }
 
@@ -59,12 +64,16 @@ public class ResizeTask implements Runnable {
             deleteMessage();
 
         } catch (IOException | ArgumentException e) {
+            logger.log("MESSAGE_PROC_STOP", message.getBody() + "/" + e.toString());
+
             deleteObject(itemName);
             deleteMessage();
         }
     }
 
     private S3Object getObject(String itemName) {
+        logger.log("OBJECT_GET", itemName);
+
         S3ObjectId objectId = new S3ObjectId(conf.getS3().getName(), itemName);
         GetObjectRequest itemObjectRequest = new GetObjectRequest(objectId);
 
@@ -72,21 +81,21 @@ public class ResizeTask implements Runnable {
     }
 
     private void putObject(String itemName, ObjectMetadata metadata, InputStream objectIs) {
-        PutObjectRequest request2 = new PutObjectRequest(
-                conf.getS3().getName(), itemName, objectIs, metadata
-        );
-        request2.withCannedAcl(CannedAccessControlList.PublicRead);
+        logger.log("OBJECT_PUT", itemName + "/" + metadata.getUserMetadata().toString());
 
+        PutObjectRequest request2 = new PutObjectRequest(conf.getS3().getName(), itemName, objectIs, metadata);
+        request2.withCannedAcl(CannedAccessControlList.PublicRead);
         s3.putObject(request2);
     }
 
     private void deleteObject(String itemName) {
         DeleteObjectRequest request = new DeleteObjectRequest(conf.getS3().getName(), itemName);
-
         s3.deleteObject(request);
     }
 
     private void deleteMessage() {
+        logger.log("MESSAGE_DELETE", message.getBody());
+
         DeleteMessageRequest delRequest = new DeleteMessageRequest();
         delRequest.setQueueUrl(conf.getSqs().getUrl());
         delRequest.setReceiptHandle(message.getReceiptHandle());

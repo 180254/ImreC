@@ -14,7 +14,7 @@ var ip = function (req) {
 
 var log = function (req, action, message) {
     var logText =
-        '(0)' +
+        '0 | ' +
         new Date().toLocaleString() +
         ' | ' + (ip(req) || '?') +
         ' | ' + action +
