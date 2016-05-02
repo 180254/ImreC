@@ -39,10 +39,11 @@ public class ResizeTask implements Runnable {
         logger.log("MESSAGE_PROC_START", message.getBody());
 
         String itemName = message.getBody();
-        S3Object itemObject = getObject(itemName);
-        ObjectMetadata metadata = itemObject.getObjectMetadata();
 
         try {
+            S3Object itemObject = getObject(itemName);
+            ObjectMetadata metadata = itemObject.getObjectMetadata();
+
             String newSize = ensureNotNull(metadata.getUserMetaDataOf(Meta.NEW_SIZE), Meta.NEW_SIZE);
             String oFilename = ensureNotNull(metadata.getUserMetaDataOf(Meta.O_FILENAME), Meta.O_FILENAME);
             String workStatus = ensureNotNull(metadata.getUserMetaDataOf(Meta.WORK_STATUS), Meta.WORK_STATUS);
@@ -68,14 +69,17 @@ public class ResizeTask implements Runnable {
             putObject(itemName, metadata, resized.getIs());
             deleteMessage();
 
-        } catch (IOException | ArgumentException e) {
-            logger.log("MESSAGE_PROC_STOP", message.getBody() + "/" + e.toString());
+        } catch (IOException | ArgumentException | AmazonS3Exception ex) {
+            logger.log("MESSAGE_PROC_STOP", message.getBody() + "/" + ex.getMessage());
 
             deleteObject(itemName);
             deleteMessage();
 
         } catch (AmazonClientException ex) {
-            logger.log("AMAZON_CLIENT_EXCEPTION", ex.toString());
+            logger.log("AMAZON_CLIENT_EXCEPTION", ex.getMessage());
+
+        } catch (RuntimeException ex) {
+            logger.log("OTHER_EXCEPTION", ex.getMessage());
         }
     }
 
