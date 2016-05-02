@@ -1,5 +1,6 @@
 'use strict';
 
+var logger = require('../helpers/logger');
 var utils = require('../helpers/utils');
 var s3post = require('../helpers/s3post');
 var conf = utils.readJson('conf.json');
@@ -8,7 +9,6 @@ var AWS = require('aws-sdk');
 AWS.config.loadFromPath('./config.json');
 var s3 = new AWS.S3();
 var sqs = new AWS.SQS();
-var sdb = new AWS.SimpleDB();
 
 function scheduleTaskIfNew(req, scheduleParams) {
     if (scheduleParams.Bucket !== conf.S3.Name) {
@@ -22,22 +22,25 @@ function scheduleTaskIfNew(req, scheduleParams) {
 
     s3.headObject(headParams, function (err, data) {
         if (!err && data.Metadata.workstatus === '0') {
-            addSqsMessage(scheduleParams, function () {
+            addSqsMessage(req, scheduleParams, function () {
                 bumpProgress(req, scheduleParams, data.Metadata);
             });
-            logState(req, data.Metadata);
+            logger.log(req, 'TASK_NEW', scheduleParams.Key + ' ' + JSON.stringify(data.Metadata));
         }
     });
 }
 
-function addSqsMessage(scheduleParams, callback) {
+function addSqsMessage(req, scheduleParams, callback) {
     var params = {
         MessageBody: scheduleParams.Key,
         QueueUrl: conf.Sqs.Url
     };
     sqs.sendMessage(params, function (err, data) {
         if (err) console.log(err.stack);
-        else     callback();
+        else {
+            callback();
+            logger.log(req, 'TASK_SQS', scheduleParams.Key);
+        }
     });
 }
 
@@ -57,23 +60,7 @@ function bumpProgress(req, scheduleParams, metadata) {
 
     s3.copyObject(copyParams, function (err, data) {
         if (err) console.log(err.stack);
-        else     logState(req, metadata);
-    });
-}
-
-function logState(req, metadata) {
-    var logText = new Date().toLocaleString() +
-        ' | ' + req.ip +
-        ' | ' + JSON.stringify(metadata);
-
-    var simpleDbParams = {
-        DomainName: conf.SimpleDb.Domain,
-        ItemName: conf.SimpleDb.LogItemName,
-        Attributes: [{ Name: utils.random2(16), Value: logText }]
-    };
-
-    sdb.putAttributes(simpleDbParams, function (err, data) {
-        if (err) console.log(err.stack);
+        else     logger.log(req, 'TASK_STATUS=1', scheduleParams.Key);
     });
 }
 

@@ -7,7 +7,7 @@ var simpleDb = new AWS.SimpleDB();
 var utils = require('./helpers/utils');
 var conf = utils.readJson('conf.json');
 
-var actionRemaining = 0; // set!
+var actionRemaining = 1; // set!
 var callbackFunc = null;
 
 var checkStartDone = function () {
@@ -20,7 +20,7 @@ var checkStartDone = function () {
 var onStart = function (callback) {
     callbackFunc = callback;
 
-    // simpleDbInit();
+    simpleDbInit();
     checkStartDone();
 };
 

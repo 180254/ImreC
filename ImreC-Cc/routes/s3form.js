@@ -5,6 +5,7 @@ var router = express.Router();
 
 var s3post = require('../helpers/s3post');
 var utils = require('../helpers/utils');
+var logger = require('../helpers/logger');
 
 var conf = utils.readJson('conf.json');
 var confAws = utils.readJson('config.json');
@@ -30,6 +31,8 @@ router.get('/', function (req, res, next) {
         s3url: conf.S3.Url,
         s3fields: s3Fields
     });
+
+    logger.log(req, 'REQ_FORM', utils.fullUrl(req))
 });
 
 module.exports = router;

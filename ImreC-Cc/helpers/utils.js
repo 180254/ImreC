@@ -2,6 +2,7 @@
 
 var fs = require('fs');
 var crypto = require('crypto');
+var url = require('url');
 
 // credits radamus @ github
 // https://github.com/amgnet-weeia/awslab4
@@ -65,7 +66,20 @@ var clone = function (obj) {
     throw new Error("Unable to copy obj! Its type isn't supported.");
 };
 
+// credits: friends @ stackoverflow
+// http://stackoverflow.com/questions/10183291/how-to-get-the-full-url-in-express
+var fullUrl = function (req) {
+    if (req == null) return null;
+    return url.format({
+        protocol: req.protocol,
+        host: req.get('host'),
+        pathname: req.originalUrl
+    });
+};
+
 exports.readJson = readJson;
 exports.uuid = uuid;
 exports.random2 = random2;
 exports.clone = clone;
+exports.fullUrl = fullUrl;
+
