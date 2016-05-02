@@ -23,20 +23,22 @@ function scheduleTaskIfNew(req, scheduleParams) {
     s3.headObject(headParams, function (err, data) {
         if (err) console.log(err, err.stack);
         else if (data.Metadata.progress === '0') {
-            bumpProgress(req, scheduleParams, data.Metadata);
-            addSqsMessage(scheduleParams);
+            addSqsMessage(scheduleParams, function () {
+                bumpProgress(req, scheduleParams, data.Metadata);
+            });
             logState(req, data.Metadata);
         }
     });
 }
 
-function addSqsMessage(scheduleParams) {
+function addSqsMessage(scheduleParams, callback) {
     var params = {
         MessageBody: scheduleParams.Key,
         QueueUrl: conf.SQS.Url
     };
     sqs.sendMessage(params, function (err, data) {
         if (err) console.log(err.stack);
+        else     callback();
     });
 }
 
