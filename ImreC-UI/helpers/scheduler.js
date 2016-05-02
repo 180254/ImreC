@@ -1,6 +1,7 @@
 'use strict';
 
 var utils = require('../helpers/utils');
+var s3post = require('../helpers/s3post');
 var conf = utils.readJson('conf.json');
 
 var AWS = require('aws-sdk');
@@ -42,11 +43,13 @@ function addSqsMessage(scheduleParams) {
 function bumpProgress(req, scheduleParams, metadata) {
     metadata = utils.clone(metadata);
     metadata.progress = (Number.parseInt(metadata.progress) + 1).toString();
+    var s3Policy = new s3post.Policy(conf.S3.Policy);
 
     var copyParams = {
         Bucket: scheduleParams.Bucket,
         CopySource: scheduleParams.Bucket + '/' + scheduleParams.Key,
         Key: scheduleParams.Key,
+        ACL: s3Policy.getPolicy().conditions[2].acl,
         Metadata: metadata,
         MetadataDirective: 'REPLACE'
     };

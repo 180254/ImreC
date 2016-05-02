@@ -7,13 +7,14 @@
 
 var moment = require('moment');
 var ciphers = require('./ciphers');
+var utils = require('./utils');
 
 var ACCESS_KEY_FIELD_NAME = 'AWSAccessKeyId';
 var POLICY_FIELD_NAME = 'policy';
 var SIGNATURE_FIELD_NAME = 'signature';
 
 var Policy = function (policyData) {
-    this.policy = policyData;
+    this.policy = utils.clone(policyData);
     this.policy.expiration = moment().add(policyData.expiration).toJSON();
 };
 
