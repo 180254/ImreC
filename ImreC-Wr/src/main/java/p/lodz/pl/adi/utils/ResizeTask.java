@@ -78,6 +78,7 @@ public class ResizeTask implements Runnable {
         PutObjectRequest request2 = new PutObjectRequest(
                 conf.getS3().getName(), itemName, objectIs, metadata
         );
+        request2.withCannedAcl(CannedAccessControlList.PublicRead);
 
         s3.putObject(request2);
     }
@@ -87,6 +88,7 @@ public class ResizeTask implements Runnable {
                 conf.getS3().getName(), itemName, conf.getS3().getName(), itemName
         );
         request.withNewObjectMetadata(metadata);
+        request.withCannedAccessControlList(CannedAccessControlList.PublicRead);
 
         s3.copyObject(request);
     }
