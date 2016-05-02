@@ -3,7 +3,7 @@
     "Domain": "imrec_sdb",
     "LogItemName": "__Log"
   },
-  "SQS": {
+  "Sqs": {
     "Url": "https://sqs.us-west-2.amazonaws.com/079592274660/Imrec-SQS"
   },
   "S3": {
@@ -17,10 +17,10 @@
         {"acl": "public-read"},
         {"success_action_redirect": "/task/schedule"},
         ["content-length-range", 1, 5242880],
-        ["eq", "$x-amz-meta-workStatus", "0"],
-        ["eq", "$x-amz-meta-uploadedBy", ""],
-        ["starts-with", "$x-amz-meta-oFilename", ""],
-        ["starts-with", "$x-amz-meta-newSize", ""]
+        ["eq", "$x-amz-meta-workstatus", "0"],
+        ["eq", "$x-amz-meta-uploadedby", ""],
+        ["starts-with", "$x-amz-meta-ofilename", ""],
+        ["starts-with", "$x-amz-meta-newsize", ""]
       ]
     }
   }

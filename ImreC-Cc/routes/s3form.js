@@ -10,8 +10,8 @@ var conf = utils.readJson('conf.json');
 var confAws = utils.readJson('config.json');
 
 router.get('/', function (req, res, next) {
-    var uuid = utils.random2(16);
-    var server = req.protocol + '://' + req.get('host') || req.socket.remoteAddress;
+    var uuid = utils.random2(8);
+    var server = req.protocol + '://' + (req.get('host') || req.socket.remoteAddress);
 
     var s3Policy = new s3post.Policy(conf.S3.Policy);
     s3Policy.setServer(server);
@@ -22,9 +22,9 @@ router.get('/', function (req, res, next) {
     var s3Fields = s3Form.getFieldsBase();
     s3Form.addS3FormFields(s3Fields, uuid + '_${filename}');
     s3Form.addS3CredentialsFields(s3Fields, confAws);
-    s3Form.setField(s3Fields, 'x-amz-meta-workStatus', '0');
-    s3Form.setField(s3Fields, 'x-amz-meta-uploadedBy', req.ip);
-    s3Form.setField(s3Fields, 'x-amz-meta-oFilename', '${filename}');
+    s3Form.setField(s3Fields, 'x-amz-meta-workstatus', '0');
+    s3Form.setField(s3Fields, 'x-amz-meta-uploadedby', req.ip);
+    s3Form.setField(s3Fields, 'x-amz-meta-ofilename', '${filename}');
 
     res.render('index', {
         s3url: conf.S3.Url,
