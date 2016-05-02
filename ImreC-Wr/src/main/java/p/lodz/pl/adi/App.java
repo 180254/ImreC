@@ -15,6 +15,7 @@ import p.lodz.pl.adi.utils.ImageResizer;
 import p.lodz.pl.adi.utils.ResizeTask;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 public class App {
     private Conf conf;
@@ -40,17 +41,22 @@ public class App {
     }
 
 
-    public static void main(String[] args) throws IOException {
-
+    public static void main(String[] args) throws IOException, InterruptedException {
         App app = new App();
 
         ReceiveMessageRequest request = new ReceiveMessageRequest();
         request.setQueueUrl(app.conf.getSqs().getUrl());
         request.setMaxNumberOfMessages(5);
-        request.setVisibilityTimeout(2);
+        request.setVisibilityTimeout(300);
 
-        for (Message message : app.sqs.receiveMessage(request).getMessages()) {
-            new ResizeTask(message, app.conf, app.sqs, app.s3).run();
-        }
+        //noinspection InfiniteLoopStatement
+        do {
+            for (Message message : app.sqs.receiveMessage(request).getMessages()) {
+                System.out.println(message.getBody());
+                new ResizeTask(message, app.conf, app.sqs, app.s3).run();
+            }
+
+            TimeUnit.SECONDS.sleep(20);
+        } while (true);
     }
 }
