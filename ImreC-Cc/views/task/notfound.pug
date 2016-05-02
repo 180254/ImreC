@@ -1,0 +1,12 @@
+extends ../base/layout.pug
+
+block content
+    h3 Resize commission status
+    p #[b Not found]. Possible causes:
+        ul
+            li Bad task ID,
+            li File deleted as request was very old,
+            li File deleted as such request is forbidden,
+            li File deleted as such request is unprocessable.
+
+    a(href="/") Go back.

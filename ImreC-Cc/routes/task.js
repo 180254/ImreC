@@ -23,9 +23,9 @@ router.get('/schedule', function (req, res, next) {
 router.get('/', function (req, res, next) {
 
     status.getStatus(req.query.id, function (renderParams) {
-        res.render('task/status', renderParams); // ok
+        res.render('task/status', renderParams)
     }, function () {
-        res.sendStatus(404); // fail
+        res.status(404).render('task/notfound');
     });
 });
 
