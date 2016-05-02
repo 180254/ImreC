@@ -14,7 +14,7 @@
       "conditions": [
         ["starts-with", "$key", ""],
         {"bucket": "imrec-bucket"},
-        {"acl": "public-read"},
+        {"acl": "private"},
         {"success_action_redirect": "/task/schedule"},
         ["content-length-range", 1, 5242880],
         ["eq", "$x-amz-meta-workstatus", "0"],
