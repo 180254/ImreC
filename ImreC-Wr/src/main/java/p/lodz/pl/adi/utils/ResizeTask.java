@@ -47,7 +47,11 @@ public class ResizeTask implements Runnable {
             String workStatus = ensureNotNull(metadata.getUserMetaDataOf(Meta.WORK_STATUS), Meta.WORK_STATUS);
 
             if (!workStatus.equals(WorkStatus.SCHEDULED)) {
-                logger.log("MESSAGE_PROC_STOP", message.getBody() + "/" + "Not scheduled(status=" + workStatus + ".");
+                logger.log("MESSAGE_PROC_STOP", message.getBody() + "/" + "Not scheduled(status=" + workStatus + ").");
+
+                if (workStatus.equals(WorkStatus.DONE)) {
+                    deleteObject(itemName);
+                }
                 return;
             }
 

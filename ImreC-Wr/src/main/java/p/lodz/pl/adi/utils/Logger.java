@@ -23,17 +23,26 @@ public class Logger {
     }
 
     public void log(String action, String message) {
+        logInternal(true, action, message);
+    }
+
+    public void log2(String action, String message) {
+        logInternal(false, action, message);
+    }
+
+    private void logInternal(boolean sdbPut, String action, String message) {
         String uuid = RandomStringUtils.randomAlphanumeric(16);
         String textLog = String.format("1 | %s | ? | %s | %s", LocalDateTime.now().format(dtf), action, message);
-
-        ReplaceableAttribute attribute = new ReplaceableAttribute(uuid, textLog, true);
-        PutAttributesRequest request = new PutAttributesRequest(
-                conf.getSimpleDb().getDomain(),
-                conf.getSimpleDb().getLogItemName(),
-                Collections.singletonList(attribute)
-        );
-
         System.out.println(textLog);
-        sdb.putAttributesAsync(request);
+
+        if (sdbPut) {
+            ReplaceableAttribute attribute = new ReplaceableAttribute(uuid, textLog, true);
+            PutAttributesRequest request = new PutAttributesRequest(
+                    conf.getSimpleDb().getDomain(),
+                    conf.getSimpleDb().getLogItemName(),
+                    Collections.singletonList(attribute)
+            );
+            sdb.putAttributesAsync(request);
+        }
     }
 }

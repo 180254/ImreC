@@ -10,13 +10,16 @@ import com.amazonaws.services.sqs.AmazonSQSAsync;
 import com.amazonaws.services.sqs.AmazonSQSAsyncClient;
 import com.amazonaws.services.sqs.model.Message;
 import com.amazonaws.services.sqs.model.ReceiveMessageRequest;
+import com.amazonaws.services.sqs.model.ReceiveMessageResult;
 import p.lodz.pl.adi.config.CoProvider;
 import p.lodz.pl.adi.config.Conf;
 import p.lodz.pl.adi.config.Config;
+import p.lodz.pl.adi.utils.ExecutorUtil;
 import p.lodz.pl.adi.utils.Logger;
 import p.lodz.pl.adi.utils.ResizeTask;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class App {
@@ -50,13 +53,25 @@ public class App {
 
         ReceiveMessageRequest request = new ReceiveMessageRequest();
         request.setQueueUrl(app.conf.getSqs().getUrl());
-        request.setMaxNumberOfMessages(5);
         request.setVisibilityTimeout(300);
+
+        ExecutorUtil executor = new ExecutorUtil();
 
         //noinspection InfiniteLoopStatement
         do {
-            for (Message message : app.sqs.receiveMessage(request).getMessages()) {
-                new ResizeTask(message, app.logger, app.conf, app.sqs, app.s3).run();
+            app.logger.log2("COMPLETED", Long.toString(executor.getCompletedTaskCount()));
+
+            request.setMaxNumberOfMessages(executor.needTasks());
+            ReceiveMessageResult result = app.sqs.receiveMessage(request);
+            List<Message> messages = result.getMessages();
+
+            for (Message message : messages) {
+                Runnable resizeTask = new ResizeTask(message, app.logger, app.conf, app.sqs, app.s3);
+                executor.submit(resizeTask);
+            }
+
+            if (executor.getActiveCount() == 0 && messages.isEmpty()) {
+                app.logger.log2("NOP", "NOP");
             }
 
             TimeUnit.SECONDS.sleep(20);
