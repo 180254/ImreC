@@ -33,4 +33,11 @@ router.get('/', function (req, res, next) {
     });
 });
 
+router.get('/submitted', function (req, res, next) {
+    res.render('submitted', {
+        bucket: req.query.bucket,
+        key: req.query.key
+    });
+});
+
 module.exports = router;
