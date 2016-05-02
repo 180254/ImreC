@@ -61,8 +61,6 @@ S3Form.prototype.addS3FormFields = function (fields, filename) {
         if (Array.isArray(elem)) {
             if (elem[1] === '$key') {
                 fields.push(self.field('key', elem[2] + filename));
-            } else {
-                fields.push(self.field(elem[1].substr(1), elem[2]));
             }
 
         } else {

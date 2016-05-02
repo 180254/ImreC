@@ -16,6 +16,7 @@
         {"bucket": "imrec-bucket"},
         {"acl": "public-read"},
         {"success_action_redirect": "/task/schedule"},
+        ["content-length-range", 1, 5242880],
         ["eq", "$x-amz-meta-progress", "0"],
         ["starts-with", "$x-amz-meta-uploadedBy", ""],
         ["starts-with", "$x-amz-meta-filename", ""],
