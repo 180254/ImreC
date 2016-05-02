@@ -1,0 +1,11 @@
+extends ../base/layout.pug
+
+block content
+    h3 Resize commission status
+    p
+        ul
+            li ID = #{id}
+            li URL = #[a(href=url)=url]
+            li Status = #[b=status]
+
+    a(href="/") Go back.
