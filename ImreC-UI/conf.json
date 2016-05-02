@@ -1,7 +1,13 @@
 {
-  "SQS": "https://sqs.us-west-2.amazonaws.com/079592274660/Imrec-SQS",
+  "SimpleDb": {
+    "Domain": "imrec_sdb",
+    "LogItemName": "__Log"
+  },
+  "SQS": {
+    "Url": "https://sqs.us-west-2.amazonaws.com/079592274660/Imrec-SQS"
+  },
   "S3": {
-    "URL": "https://imrec-bucket.s3-us-west-2.amazonaws.com/",
+    "Url": "https://imrec-bucket.s3-us-west-2.amazonaws.com/",
     "Policy": {
       "expiration": {"day": 1},
       "conditions": [

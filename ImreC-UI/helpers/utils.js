@@ -1,6 +1,7 @@
 'use strict';
 
 var fs = require('fs');
+var crypto = require('crypto');
 
 //  credits radamus @ github
 // https://github.com/amgnet-weeia/awslab4
@@ -20,6 +21,10 @@ var uuid = function () {
         var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
     });
+};
+
+var random2 = function (bytes) {
+    return crypto.randomBytes(bytes).toString('hex');
 };
 
 // credits: friends @ stackoverflow
@@ -60,4 +65,5 @@ var clone = function (obj) {
 
 exports.readJson = readJson;
 exports.uuid = uuid;
+exports.random2 = random2;
 exports.clone = clone;

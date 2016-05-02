@@ -8,6 +8,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var s3form = require('./routes/s3form');
+var simpledb = require('./routes/simpledb');
 
 var app = express();
 
@@ -24,6 +25,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', s3form);
+
+if (app.get('env') === 'development') {
+    app.use('/simpledb', simpledb);
+}
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
