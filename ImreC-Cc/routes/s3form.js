@@ -15,10 +15,11 @@ router.get('/', function (req, res, next) {
 
     var s3Policy = new s3post.Policy(conf.S3.Policy);
     s3Policy.setServer(server);
+    s3Policy.setFilenamePrefix(uuid);
 
     var s3Form = new s3post.S3Form(s3Policy);
     var s3Fields = s3Form.getFieldsBase();
-    s3Form.addS3FormFields(s3Fields, uuid);
+    s3Form.addS3FormFields(s3Fields, uuid + '_${filename}');
     s3Form.addS3CredentialsFields(s3Fields, confAws);
     s3Form.setField(s3Fields, 'x-amz-meta-progress', '0');
     s3Form.setField(s3Fields, 'x-amz-meta-uploadedBy', req.ip);

@@ -27,6 +27,11 @@ Policy.prototype.setServer = function (server) {
         server + this.policy.conditions[3].success_action_redirect
 };
 
+Policy.prototype.setFilenamePrefix = function (prefix) {
+    this.policy.conditions[0][2] =
+        prefix + this.policy.conditions[0][2];
+};
+
 Policy.prototype.generateEncodedPolicyDocument = function () {
     return ciphers.encode(this.policy, 'base64');
 };
