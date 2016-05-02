@@ -61,6 +61,8 @@ S3Form.prototype.addS3FormFields = function (fields, filename) {
         if (Array.isArray(elem)) {
             if (elem[1] === '$key') {
                 fields.push(self.field('key', elem[2] + filename));
+            } else {
+                fields.push(self.field(elem[1].substr(1), elem[2]));
             }
 
         } else {
@@ -80,7 +82,14 @@ S3Form.prototype.addS3CredentialsFields = function (fields, awsConfig) {
     return fields;
 };
 
-S3Form.prototype.addCustomField = function (fields, name, value) {
+S3Form.prototype.setField = function (fields, name, value) {
+    for (var i = 0, len = fields.length; i < len; i++) {
+        if (fields[i].name == name) {
+            fields[i].value = value;
+            return;
+        }
+    }
+
     fields.push(this.field(name, value));
 };
 

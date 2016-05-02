@@ -12,6 +12,7 @@ var callbackFunc = null;
 
 var checkStartDone = function () {
     if (--actionRemaining <= 0) {
+        console.log('onStart OK.');
         callbackFunc();
     }
 };
@@ -19,8 +20,8 @@ var checkStartDone = function () {
 var onStart = function (callback) {
     callbackFunc = callback;
 
-    // simpleDbInit();
-    checkStartDone();
+    simpleDbInit();
+    // checkStartDone();
 };
 
 var simpleDbInit = function () {
