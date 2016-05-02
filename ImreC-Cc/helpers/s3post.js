@@ -32,6 +32,10 @@ Policy.prototype.setFilenamePrefix = function (prefix) {
         prefix + this.policy.conditions[0][2];
 };
 
+Policy.prototype.setUploadedBy = function (uploadedBy) {
+    this.policy.conditions[6][2] = uploadedBy;
+};
+
 Policy.prototype.generateEncodedPolicyDocument = function () {
     return ciphers.encode(this.policy, 'base64');
 };

@@ -22,7 +22,7 @@ function scheduleTaskIfNew(req, scheduleParams) {
 
     s3.headObject(headParams, function (err, data) {
         if (err) console.log(err, err.stack);
-        else if (data.Metadata.progress === '0') {
+        else if (data.Metadata.workStatus === '0') {
             addSqsMessage(scheduleParams, function () {
                 bumpProgress(req, scheduleParams, data.Metadata);
             });
@@ -44,7 +44,7 @@ function addSqsMessage(scheduleParams, callback) {
 
 function bumpProgress(req, scheduleParams, metadata) {
     metadata = utils.clone(metadata);
-    metadata.progress = (Number.parseInt(metadata.progress) + 1).toString();
+    metadata.workStatus = (Number.parseInt(metadata.workStatus) + 1).toString();
     var s3Policy = new s3post.Policy(conf.S3.Policy);
 
     var copyParams = {
