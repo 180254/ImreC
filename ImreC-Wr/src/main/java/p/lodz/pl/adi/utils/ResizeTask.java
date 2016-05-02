@@ -59,13 +59,10 @@ public class ResizeTask implements Runnable {
             deleteMessage();
 
         } catch (IOException | ArgumentException e) {
-            metadata.getUserMetadata().put(Meta.WORK_STATUS, WorkStatus.DONE);
-            changeMetadata(itemName, metadata);
-
+            deleteObject(itemName);
             deleteMessage();
         }
     }
-
 
     private S3Object getObject(String itemName) {
         S3ObjectId objectId = new S3ObjectId(conf.getS3().getName(), itemName);
@@ -83,14 +80,10 @@ public class ResizeTask implements Runnable {
         s3.putObject(request2);
     }
 
-    private void changeMetadata(String itemName, ObjectMetadata metadata) {
-        CopyObjectRequest request = new CopyObjectRequest(
-                conf.getS3().getName(), itemName, conf.getS3().getName(), itemName
-        );
-        request.withNewObjectMetadata(metadata);
-        request.withCannedAccessControlList(CannedAccessControlList.PublicRead);
+    private void deleteObject(String itemName) {
+        DeleteObjectRequest request = new DeleteObjectRequest(conf.getS3().getName(), itemName);
 
-        s3.copyObject(request);
+        s3.deleteObject(request);
     }
 
     private void deleteMessage() {
