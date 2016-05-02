@@ -4,7 +4,6 @@
     "LogItemName": "__Log"
   },
   "SQS": {
-    "Name": "Imrec-SQS",
     "Url": "https://sqs.us-west-2.amazonaws.com/079592274660/Imrec-SQS"
   },
   "S3": {

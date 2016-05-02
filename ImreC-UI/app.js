@@ -29,7 +29,7 @@ app.use('/', s3formRoute);
 app.use('/task', taskRoute);
 
 if (app.get('env') === 'development') {
-    app.use('/simpleDb', simpleDbRoute);
+    app.use('/simpledb', simpleDbRoute);
 }
 
 // catch 404 and forward to error handler

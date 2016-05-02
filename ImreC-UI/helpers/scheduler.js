@@ -5,8 +5,9 @@ var conf = utils.readJson('conf.json');
 
 var AWS = require('aws-sdk');
 AWS.config.loadFromPath('./config.json');
-var simpleDb = new AWS.SimpleDB();
 var s3 = new AWS.S3();
+var sqs = new AWS.SQS();
+var sdb = new AWS.SimpleDB();
 
 function scheduleTaskIfNew(req, scheduleParams) {
     if (scheduleParams.Bucket !== conf.S3.Name) {
@@ -22,9 +23,19 @@ function scheduleTaskIfNew(req, scheduleParams) {
         if (err) console.log(err, err.stack);
         else if (data.Metadata.progress === '0') {
             bumpProgress(req, scheduleParams, data.Metadata);
+            addSqsMessage(scheduleParams);
             logState(req, data.Metadata);
-            // added to sqs by event
         }
+    });
+}
+
+function addSqsMessage(scheduleParams) {
+    var params = {
+        MessageBody: scheduleParams.Key,
+        QueueUrl: conf.SQS.Url
+    };
+    sqs.sendMessage(params, function (err, data) {
+        if (err) console.log(err.stack);
     });
 }
 
@@ -57,7 +68,7 @@ function logState(req, metadata) {
         Attributes: [{ Name: utils.random2(16), Value: logText }]
     };
 
-    simpleDb.putAttributes(simpleDbParams, function (err, data) {
+    sdb.putAttributes(simpleDbParams, function (err, data) {
         if (err) console.log(err.stack);
     });
 }
