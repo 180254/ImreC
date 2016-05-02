@@ -4,10 +4,10 @@ import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.regions.Region;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.simpledb.AmazonSimpleDB;
-import com.amazonaws.services.simpledb.AmazonSimpleDBClient;
-import com.amazonaws.services.sqs.AmazonSQS;
-import com.amazonaws.services.sqs.AmazonSQSClient;
+import com.amazonaws.services.simpledb.AmazonSimpleDBAsync;
+import com.amazonaws.services.simpledb.AmazonSimpleDBAsyncClient;
+import com.amazonaws.services.sqs.AmazonSQSAsync;
+import com.amazonaws.services.sqs.AmazonSQSAsyncClient;
 import com.amazonaws.services.sqs.model.Message;
 import com.amazonaws.services.sqs.model.ReceiveMessageRequest;
 import p.lodz.pl.adi.config.CoProvider;
@@ -24,7 +24,7 @@ public class App {
     public Logger logger;
 
     private Conf conf;
-    private AmazonSQS sqs;
+    private AmazonSQSAsync sqs;
     private AmazonS3 s3;
 
     public App() throws IOException {
@@ -34,13 +34,13 @@ public class App {
         AWSCredentials awsCredentials = config.toAWSCredentials();
         Region awsRegion = config.getAWSRegion();
 
-        sqs = new AmazonSQSClient(awsCredentials);
+        sqs = new AmazonSQSAsyncClient(awsCredentials);
         sqs.setRegion(awsRegion);
 
         s3 = new AmazonS3Client(awsCredentials);
         sqs.setRegion(awsRegion);
 
-        AmazonSimpleDB sdb = new AmazonSimpleDBClient(awsCredentials);
+        AmazonSimpleDBAsync sdb = new AmazonSimpleDBAsyncClient(awsCredentials);
         sdb.setRegion(awsRegion);
         logger = new Logger(conf, sdb);
     }

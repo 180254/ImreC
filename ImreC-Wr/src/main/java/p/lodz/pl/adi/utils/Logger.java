@@ -1,6 +1,6 @@
 package p.lodz.pl.adi.utils;
 
-import com.amazonaws.services.simpledb.AmazonSimpleDB;
+import com.amazonaws.services.simpledb.AmazonSimpleDBAsync;
 import com.amazonaws.services.simpledb.model.PutAttributesRequest;
 import com.amazonaws.services.simpledb.model.ReplaceableAttribute;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -15,9 +15,9 @@ public class Logger {
     private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     private final Conf conf;
-    private final AmazonSimpleDB sdb;
+    private final AmazonSimpleDBAsync sdb;
 
-    public Logger(Conf conf, AmazonSimpleDB sdb) {
+    public Logger(Conf conf, AmazonSimpleDBAsync sdb) {
         this.conf = conf;
         this.sdb = sdb;
     }
@@ -34,6 +34,6 @@ public class Logger {
         );
 
         System.out.println(textLog);
-        sdb.putAttributes(request);
+        sdb.putAttributesAsync(request);
     }
 }

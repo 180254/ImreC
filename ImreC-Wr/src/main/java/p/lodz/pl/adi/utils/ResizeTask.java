@@ -3,7 +3,7 @@ package p.lodz.pl.adi.utils;
 import com.amazonaws.services.devicefarm.model.ArgumentException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
-import com.amazonaws.services.sqs.AmazonSQS;
+import com.amazonaws.services.sqs.AmazonSQSAsync;
 import com.amazonaws.services.sqs.model.DeleteMessageRequest;
 import com.amazonaws.services.sqs.model.Message;
 import org.apache.commons.io.FilenameUtils;
@@ -20,12 +20,12 @@ public class ResizeTask implements Runnable {
     private Logger logger;
 
     private Conf conf;
-    private AmazonSQS sqs;
+    private AmazonSQSAsync sqs;
     private AmazonS3 s3;
 
     private ImageResizer ir = new ImageResizer();
 
-    public ResizeTask(Message message, Logger logger, Conf conf, AmazonSQS sqs, AmazonS3 s3) {
+    public ResizeTask(Message message, Logger logger, Conf conf, AmazonSQSAsync sqs, AmazonS3 s3) {
         this.message = message;
         this.logger = logger;
         this.conf = conf;
@@ -47,7 +47,7 @@ public class ResizeTask implements Runnable {
             String workStatus = ensureNotNull(metadata.getUserMetaDataOf(Meta.WORK_STATUS), Meta.WORK_STATUS);
 
             if (!workStatus.equals(WorkStatus.SCHEDULED)) {
-                logger.log("MESSAGE_PROC_STOP", message.getBody() + "/" + "Not scheduled.");
+                logger.log("MESSAGE_PROC_STOP", message.getBody() + "/" + "Not scheduled(status=" + workStatus + ".");
                 return;
             }
 
@@ -100,7 +100,7 @@ public class ResizeTask implements Runnable {
         delRequest.setQueueUrl(conf.getSqs().getUrl());
         delRequest.setReceiptHandle(message.getReceiptHandle());
 
-        sqs.deleteMessage(delRequest);
+        sqs.deleteMessageAsync(delRequest);
     }
 
     private <T> T ensureNotNull(T obj, String varName) {
