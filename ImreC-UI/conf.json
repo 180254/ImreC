@@ -14,7 +14,7 @@
         ["starts-with", "$key", ""],
         {"bucket": "imrec-bucket"},
         {"acl": "public-read"},
-        {"success_action_redirect": "/submitted"},
+        {"success_action_redirect": "/task/schedule"},
         ["content-length-range", 0, 5242880],
         ["starts-with", "$x-amz-meta-uploaded-by", ""],
         ["starts-with", "$x-amz-meta-filename", ""],

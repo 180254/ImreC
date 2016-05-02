@@ -7,8 +7,9 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var s3form = require('./routes/s3form');
-var simpledb = require('./routes/simpledb');
+var s3formRoute = require('./routes/s3form');
+var taskRoute = require('./routes/task');
+var simpleDbRoute = require('./routes/simpledb');
 
 var app = express();
 
@@ -24,10 +25,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', s3form);
+app.use('/', s3formRoute);
+app.use('/task', taskRoute);
 
 if (app.get('env') === 'development') {
-    app.use('/simpledb', simpledb);
+    app.use('/simpleDb', simpleDbRoute);
 }
 
 // catch 404 and forward to error handler
@@ -46,7 +48,7 @@ if (app.get('env') === 'development') {
 
     app.use(function (err, req, res, next) {
         res.status(err.status || 500);
-        res.render('error', {
+        res.render('base/error', {
             message: err.message,
             error: err
         });
@@ -57,7 +59,7 @@ if (app.get('env') === 'development') {
 // no stacktraces leaked to user
 app.use(function (err, req, res, next) {
     res.status(err.status || 500);
-    res.render('error', {
+    res.render('base/error', {
         message: err.message,
         error: {}
     });

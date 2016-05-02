@@ -1,4 +1,4 @@
-extends layout
+extends ./base/layout.pug
 
 block content
     form(action=s3url, method="post", enctype="multipart/form-data" class="form-horizontal")
@@ -11,7 +11,7 @@ block content
                 input(type="number" name="x-amz-meta-task" id="x-amz-meta-task" min="1" max="200" value="50")
 
         div(class="form-group")
-            label(for="file" class="col-sm-2 control-label") Rescaled file
+            label(for="file" class="col-sm-2 control-label") File to scale
             div(class="col-sm-10")
                 input(type="file" name="file" id="file")
 

@@ -9,7 +9,7 @@ var conf = utils.readJson('conf.json');
 var AWS = require('aws-sdk');
 AWS.config.loadFromPath('./config.json');
 
-var simpledb = new AWS.SimpleDB();
+var simpleDb = new AWS.SimpleDB();
 
 router.get('/', function (req, res, next) {
     res.setHeader('Content-Type', 'application/json');
@@ -18,7 +18,7 @@ router.get('/', function (req, res, next) {
         SelectExpression: 'select * from ' + conf.SimpleDb.Domain
     };
 
-    simpledb.select(params, function (err, data) {
+    simpleDb.select(params, function (err, data) {
         if (err) res.send(JSON.stringify(err.stack, null, ' '));
         else     res.send(JSON.stringify(data, null, ' '));
     });

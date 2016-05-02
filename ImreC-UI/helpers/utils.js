@@ -3,7 +3,7 @@
 var fs = require('fs');
 var crypto = require('crypto');
 
-//  credits radamus @ github
+// credits radamus @ github
 // https://github.com/amgnet-weeia/awslab4
 var readJson = function (fileName) {
     if (!fs.existsSync(fileName)) {
@@ -23,6 +23,8 @@ var uuid = function () {
     });
 };
 
+// credits: friends @ stackoverflow
+// http://stackoverflow.com/questions/1349404/generate-a-string-of-5-random-characters-in-javascript
 var random2 = function (bytes) {
     return crypto.randomBytes(bytes).toString('hex');
 };
