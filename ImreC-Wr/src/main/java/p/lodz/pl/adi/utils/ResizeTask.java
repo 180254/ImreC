@@ -49,7 +49,7 @@ public class ResizeTask implements Runnable {
             String workStatus = ensureNotNull(metadata.getUserMetaDataOf(Meta.WORK_STATUS), Meta.WORK_STATUS);
 
             if (!workStatus.equals(WorkStatus.SCHEDULED)) {
-                logger.log("MESSAGE_PROC_STOP", message.getBody() + "/" + "Not scheduled(status=" + workStatus + ").");
+                logger.log("MESSAGE_PROC_STOP", message.getBody(), "Not scheduled(status=" + workStatus + ").");
 
                 if (workStatus.equals(WorkStatus.DONE)) {
                     deleteObject(itemName);
@@ -70,7 +70,7 @@ public class ResizeTask implements Runnable {
             deleteMessage();
 
         } catch (IOException | ArgumentException | AmazonS3Exception ex) {
-            logger.log("MESSAGE_PROC_STOP", message.getBody() + "/" + ex.getMessage());
+            logger.log("MESSAGE_PROC_STOP", message.getBody(), ex.getMessage());
 
             deleteObject(itemName);
             deleteMessage();
@@ -93,7 +93,7 @@ public class ResizeTask implements Runnable {
     }
 
     private void putObject(String itemName, ObjectMetadata metadata, InputStream objectIs) {
-        logger.log("OBJECT_PUT", itemName + "/" + metadata.getUserMetadata().toString());
+        logger.log("OBJECT_PUT", itemName, metadata.getUserMetadata().toString());
 
         PutObjectRequest request2 = new PutObjectRequest(conf.getS3().getName(), itemName, objectIs, metadata);
         request2.withCannedAcl(CannedAccessControlList.PublicRead);

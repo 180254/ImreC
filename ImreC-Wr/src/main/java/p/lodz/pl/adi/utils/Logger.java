@@ -23,7 +23,7 @@ public class Logger {
         this.sdb = sdb;
     }
 
-    public void log(String action, String message) {
+    public void log(String action, String... message) {
         try {
             logInternal(true, action, message);
 
@@ -31,13 +31,17 @@ public class Logger {
         }
     }
 
-    public void log2(String action, String message) {
+    public void log2(String action, String... message) {
         logInternal(false, action, message);
     }
 
-    private void logInternal(boolean sdbPut, String action, String message) {
+    private void logInternal(boolean sdbPut, String action, String... message) {
         String uuid = RandomStringUtils.randomAlphanumeric(16);
-        String textLog = String.format("1 | %s | ? | %s | %s", LocalDateTime.now().format(dtf), action, message);
+        String textLog = String.format("1 | %s | ? | %s", LocalDateTime.now().format(dtf), action);
+        for (String mes : message) {
+            textLog += String.format(" | %s", mes);
+        }
+
         System.out.println(textLog);
 
         if (sdbPut) {

@@ -25,7 +25,7 @@ function scheduleTaskIfNew(req, scheduleParams) {
             addSqsMessage(req, scheduleParams, function () {
                 bumpProgress(req, scheduleParams, data.Metadata);
             });
-            logger.log(req, 'TASK_NEW', scheduleParams.Key + ' ' + JSON.stringify(data.Metadata));
+            logger.log(req, 'TASK_NEW', scheduleParams.Key, JSON.stringify(data.Metadata));
         }
     });
 }
