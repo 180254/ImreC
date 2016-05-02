@@ -5,12 +5,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Conf {
 
-    private final ConfSimpleDb simpleDb;
+    private final ConfSdb simpleDb;
     private final ConfSqs sqs;
     private final ConfS3 s3;
 
     @JsonCreator
-    public Conf(@JsonProperty("SimpleDb") ConfSimpleDb simpleDb,
+    public Conf(@JsonProperty("SimpleDb") ConfSdb simpleDb,
                 @JsonProperty("Sqs") ConfSqs sqs,
                 @JsonProperty("S3") ConfS3 s3) {
 
@@ -19,7 +19,7 @@ public class Conf {
         this.s3 = s3;
     }
 
-    public ConfSimpleDb getSimpleDb() {
+    public ConfSdb getSimpleDb() {
         return simpleDb;
     }
 

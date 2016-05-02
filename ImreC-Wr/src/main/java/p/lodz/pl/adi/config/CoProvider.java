@@ -10,11 +10,11 @@ import java.nio.file.Paths;
 
 public class CoProvider {
 
-    public final static String CONIG_FILENAME = "config.json";
+    public final static String CONFIG_FILENAME = "config.json";
     public final static String CONF_FILENAME = "conf.json";
 
     public static Config getConfig() throws IOException {
-        return read(Config.class, CONIG_FILENAME);
+        return read(Config.class, CONFIG_FILENAME);
     }
 
     public static Conf getConf() throws IOException {

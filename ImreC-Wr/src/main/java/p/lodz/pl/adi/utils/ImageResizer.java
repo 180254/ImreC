@@ -6,6 +6,7 @@ import org.imgscalr.Scalr;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -35,16 +36,15 @@ public class ImageResizer {
 
         BufferedImage scaledImage = Scalr.resize(srcImage, newWidth, newHeight);
 
-        return result(scaledImage, imageType);
+        return makeResult(scaledImage, imageType);
     }
 
-    private InputStreamEnh result(BufferedImage image, String imageType) throws IOException {
+    private InputStreamEnh makeResult(RenderedImage image, String imageType) throws IOException {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         ImageIO.write(image, imageType, os);
 
         byte[] bytes = os.toByteArray();
         InputStream is = new ByteArrayInputStream(bytes);
-
         return new InputStreamEnh(is, bytes.length);
     }
 

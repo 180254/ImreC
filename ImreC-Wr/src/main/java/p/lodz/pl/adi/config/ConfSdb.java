@@ -3,14 +3,14 @@ package p.lodz.pl.adi.config;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class ConfSimpleDb {
+public class ConfSdb {
 
     private final String domain;
     private final String logItemName;
 
     @JsonCreator
-    public ConfSimpleDb(@JsonProperty("Domain") String domain,
-                        @JsonProperty("LogItemName") String logItemName) {
+    public ConfSdb(@JsonProperty("Domain") String domain,
+                   @JsonProperty("LogItemName") String logItemName) {
 
         this.domain = domain;
         this.logItemName = logItemName;
