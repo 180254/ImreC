@@ -13,3 +13,11 @@ ImreC-Wr -- App2, Java, Worker
 3.1 Set bucket file deletion policy in AWS console.
 3.2 Set that name in ImreC-[Cc,Wr]\conf.json
 3.3 Set that url in ImreC-[Cc,Wr]\conf.json
+
+How to start ImreC-Cc (choose one):
+* npm start
+* node bin/www
+
+How to start ImreC-Wr (choose one):
+* mvn exec:java
+* mvn package && java -jar target/imrec-worker-0.1-jar-with-dependencies.jar
