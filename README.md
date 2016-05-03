@@ -1,4 +1,4 @@
-IMage REsizer in Cloud  
-![ImreC architecture](architecture.png?raw=true "ImreC architecture")  
-![ImreC-Cc screenshot2](screenshot2.PNG?raw=true "ImreC-Cc screenshot1")  
-![ImreC-Cc screenshot2](screenshot2.PNG?raw=true "ImreC-Cc screenshot2")
+<b>Im</b>age <b>re</b>sizer in <b>C</b>loud  
+<img src="architecture.png?raw=true" alt="ImreC architecture">  
+<img src="screenshot1.PNG?raw=true" alt="ImreC-Cc screenshot1" width="650">  
+<img src="screenshot2.PNG?raw=true" alt="ImreC-Wr screenshot2" width="650">
