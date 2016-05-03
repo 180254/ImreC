@@ -1,57 +1,39 @@
 package p.lodz.pl.adi.utils;
 
 import com.amazonaws.AmazonClientException;
-import com.amazonaws.services.simpledb.AmazonSimpleDBAsync;
-import com.amazonaws.services.simpledb.model.PutAttributesRequest;
-import com.amazonaws.services.simpledb.model.ReplaceableAttribute;
-import org.apache.commons.lang3.RandomStringUtils;
-import p.lodz.pl.adi.config.Conf;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
 
 public class Logger {
 
     private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private final AmazonHelper am;
 
-    private final Conf conf;
-    private final AmazonSimpleDBAsync sdb;
-
-    public Logger(Conf conf, AmazonSimpleDBAsync sdb) {
-        this.conf = conf;
-        this.sdb = sdb;
+    public Logger(AmazonHelper am) {
+        this.am = am;
     }
 
-    public void log(String action, String... message) {
+    public void log(String action, Object... args) {
         try {
-            logInternal(true, action, message);
+            logInternal(true, action, args);
 
         } catch (AmazonClientException ignored) {
         }
     }
 
-    public void log2(String action, String... message) {
-        logInternal(false, action, message);
+    public void log2(String action, Object... args) {
+        logInternal(false, action, args);
     }
 
-    private void logInternal(boolean sdbPut, String action, String... message) {
-        String uuid = RandomStringUtils.randomAlphanumeric(16);
-        String textLog = String.format("1 | %s | ? | %s", LocalDateTime.now().format(dtf), action);
-        for (String mes : message) {
-            textLog += String.format(" | %s", mes);
+    private void logInternal(boolean sdbPut, String action, Object... args) {
+        String text = String.format("1 | %s | ? | %s", LocalDateTime.now().format(dtf), action);
+
+        for (Object mes : args) {
+            text += String.format(" | %s", mes.toString());
         }
 
-        System.out.println(textLog);
-
-        if (sdbPut) {
-            ReplaceableAttribute attribute = new ReplaceableAttribute(uuid, textLog, true);
-            PutAttributesRequest request = new PutAttributesRequest(
-                    conf.getSimpleDb().getDomain(),
-                    conf.getSimpleDb().getLogItemName(),
-                    Collections.singletonList(attribute)
-            );
-            sdb.putAttributesAsync(request);
-        }
+        System.out.println(text);
+        if (sdbPut) am.sdb$putLogAsync(text);
     }
 }

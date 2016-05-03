@@ -10,6 +10,7 @@ var s3 = new AWS.S3();
 var statusDescriptions = [
     'File successfully uploaded. Resize task to be scheduled. Please wait.',
     'File successfully uploaded. Resize task scheduled. Please wait.',
+    'System is resizing this file right now. Please wait.',
     'File processed. Results ready to download.'
 ];
 

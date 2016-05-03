@@ -24,7 +24,7 @@ public class ImageResizer {
      * @throws IOException       if resizing failed due to IO
      * @throws ArgumentException if resizing failed due to arguments
      */
-    public InputStreamEnh resize(InputStream is, int sizeMultiplier, String imageType) throws IOException {
+    public InputStreamE resize(InputStream is, int sizeMultiplier, String imageType) throws IOException {
         ensureImageType(imageType);
         ensureSizeMultiplier(sizeMultiplier);
 
@@ -39,17 +39,18 @@ public class ImageResizer {
         return makeResult(scaledImage, imageType);
     }
 
-    private InputStreamEnh makeResult(RenderedImage image, String imageType) throws IOException {
+    private InputStreamE makeResult(RenderedImage image, String imageType) throws IOException {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         ImageIO.write(image, imageType, os);
 
         byte[] bytes = os.toByteArray();
         InputStream is = new ByteArrayInputStream(bytes);
-        return new InputStreamEnh(is, bytes.length);
+        return new InputStreamE(is, bytes.length);
     }
 
     private void ensureImageType(String imageType) {
-        if (!Stream.of(PROPER_IMG_TYPES).anyMatch(p -> p.equals(imageType))) {
+        String imageTypeUpper = imageType.toUpperCase();
+        if (!Stream.of(PROPER_IMG_TYPES).anyMatch(p -> p.equals(imageTypeUpper))) {
             throw new ArgumentException("imageType");
         }
     }

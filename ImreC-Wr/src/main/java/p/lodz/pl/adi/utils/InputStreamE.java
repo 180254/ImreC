@@ -2,12 +2,12 @@ package p.lodz.pl.adi.utils;
 
 import java.io.InputStream;
 
-public class InputStreamEnh {
+public class InputStreamE {
 
-    private InputStream is;
-    private long isLength;
+    private final InputStream is;
+    private final long isLength;
 
-    public InputStreamEnh(InputStream is, long isLength) {
+    public InputStreamE(InputStream is, long isLength) {
         this.is = is;
         this.isLength = isLength;
     }

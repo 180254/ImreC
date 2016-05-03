@@ -1,8 +1,19 @@
 package p.lodz.pl.adi.enum1;
 
-public class WorkStatus {
+public enum WorkStatus {
 
-    public static final String UPLOADED = "0";
-    public static final String SCHEDULED = "1";
-    public static final String DONE = "2";
+    Uploaded("0"),
+    Scheduled("1"),
+    Processing("2"),
+    Done("3");
+
+    private String code;
+
+    WorkStatus(String code) {
+        this.code = code;
+    }
+
+    public String c() {
+        return code;
+    }
 }

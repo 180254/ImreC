@@ -1,22 +1,13 @@
 package p.lodz.pl.adi;
 
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.regions.Region;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.simpledb.AmazonSimpleDBAsync;
-import com.amazonaws.services.simpledb.AmazonSimpleDBAsyncClient;
-import com.amazonaws.services.sqs.AmazonSQSAsync;
-import com.amazonaws.services.sqs.AmazonSQSAsyncClient;
 import com.amazonaws.services.sqs.model.Message;
-import com.amazonaws.services.sqs.model.ReceiveMessageRequest;
-import com.amazonaws.services.sqs.model.ReceiveMessageResult;
 import p.lodz.pl.adi.config.CoProvider;
 import p.lodz.pl.adi.config.Conf;
 import p.lodz.pl.adi.config.Config;
-import p.lodz.pl.adi.utils.ExecutorUtil;
+import p.lodz.pl.adi.utils.AmazonHelper;
+import p.lodz.pl.adi.utils.ExecutorHelper;
+import p.lodz.pl.adi.utils.ImageResizer;
 import p.lodz.pl.adi.utils.Logger;
-import p.lodz.pl.adi.utils.ResizeTask;
 
 import java.io.IOException;
 import java.util.List;
@@ -24,57 +15,50 @@ import java.util.concurrent.TimeUnit;
 
 public class App {
 
-    public Logger logger;
+    private final Logger logger;
 
-    private Conf conf;
-    private AmazonSQSAsync sqs;
-    private AmazonS3 s3;
+    private final ImageResizer im;
+    private final AmazonHelper am;
+
+    private final ExecutorHelper executor;
 
     public App() throws IOException {
-        conf = CoProvider.getConf();
-
+        Conf conf = CoProvider.getConf();
         Config config = CoProvider.getConfig();
-        AWSCredentials awsCredentials = config.toAWSCredentials();
-        Region awsRegion = config.getAWSRegion();
 
-        sqs = new AmazonSQSAsyncClient(awsCredentials);
-        sqs.setRegion(awsRegion);
+        am = new AmazonHelper(config, conf);
+        logger = new Logger(am);
+        im = new ImageResizer();
 
-        s3 = new AmazonS3Client(awsCredentials);
-        sqs.setRegion(awsRegion);
+        am.setLogger(logger); // circular dependency!?
 
-        AmazonSimpleDBAsync sdb = new AmazonSimpleDBAsyncClient(awsCredentials);
-        sdb.setRegion(awsRegion);
-        logger = new Logger(conf, sdb);
+        executor = new ExecutorHelper();
     }
 
-    public static void main(String[] args) throws IOException, InterruptedException {
-        App app = new App();
-
-        ReceiveMessageRequest request = new ReceiveMessageRequest();
-        request.setQueueUrl(app.conf.getSqs().getUrl());
-        request.setVisibilityTimeout(300);
-
-        ExecutorUtil executor = new ExecutorUtil();
-
+    public void service() throws InterruptedException {
         //noinspection InfiniteLoopStatement
         do {
-            app.logger.log2("COMPLETED", Long.toString(executor.getCompletedTaskCount()));
+            logger.log2("COMPLETED", executor.getCompletedTaskCount());
 
-            request.setMaxNumberOfMessages(executor.needTasks());
-            ReceiveMessageResult result = app.sqs.receiveMessage(request);
-            List<Message> messages = result.getMessages();
+            int needTasks = executor.needTasks();
+            List<Message> messages = am.sqs$receiveMessages(needTasks);
 
             for (Message message : messages) {
-                Runnable resizeTask = new ResizeTask(message, app.logger, app.conf, app.sqs, app.s3);
-                executor.submit(resizeTask);
+                Runnable resizeTask = new ResizeTask(message, logger, am, im);
+                resizeTask.run();
+//                executor.submit(resizeTask);
             }
 
-            if (executor.getActiveCount() == 0 && messages.isEmpty()) {
-                app.logger.log2("NOP", "NOP");
+            if (messages.isEmpty()) {
+                logger.log2("NOP", executor.getActiveCount());
             }
 
             TimeUnit.SECONDS.sleep(20);
         } while (true);
+    }
+
+    public static void main(String[] args)
+            throws IOException, InterruptedException {
+        new App().service();
     }
 }

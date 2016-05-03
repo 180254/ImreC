@@ -23,23 +23,11 @@ public class Config {
         this.region = region;
     }
 
-    public String getAccessKeyId() {
-        return accessKeyId;
-    }
-
-    public String getSecretAccessKey() {
-        return secretAccessKey;
-    }
-
-    public String getRegion() {
-        return region;
-    }
-
-    public AWSCredentials toAWSCredentials() {
+    public AWSCredentials awsCredentials() {
         return new BasicAWSCredentials(accessKeyId, secretAccessKey);
     }
 
-    public Region getAWSRegion() {
+    public Region awsRegion() {
         return Region.getRegion(Regions.fromName(region));
     }
 }
