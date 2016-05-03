@@ -1,7 +1,12 @@
 ImreC-Cc -- App1, NodeJS, Web app: commission collector
 ImreC-Wr -- App2, Java, Worker
 
-0.1 Put config.json (accessKeyId, secretAccessKey, region) in ImreC-[Cc,Wr]\
+0.1 Put config.json in ImreC-[Cc,Wr]\
+{
+  "accessKeyId": "",
+  "secretAccessKey": "",
+  "region": "us-west-2"
+}
 
 1. Create SimpleDB domain.
 1.1 Set that name in ImreC-[Cc,Wr]\conf.json
