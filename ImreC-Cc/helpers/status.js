@@ -28,6 +28,7 @@ var getStatus = function (bucketKey, callbackOk, callbackFail) {
             var renderParams = {
                 id: bucketKey,
                 url: conf.S3.Url + '/' + bucketKey,
+                scale: data.Metadata.newsize,
                 status: statusDescriptions[Number.parseInt(data.Metadata.workstatus)]
             };
 
