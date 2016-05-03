@@ -9,12 +9,12 @@ import com.amazonaws.services.sqs.model.Message;
 import org.apache.commons.io.FilenameUtils;
 import p.lodz.pl.adi.enum1.Meta;
 import p.lodz.pl.adi.enum1.WorkStatus;
+import p.lodz.pl.adi.exception.ResizingException;
 import p.lodz.pl.adi.utils.AmazonHelper;
 import p.lodz.pl.adi.utils.ImageResizer;
 import p.lodz.pl.adi.utils.InputStreamE;
 import p.lodz.pl.adi.utils.Logger;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 public class ResizeTask implements Runnable {
@@ -77,7 +77,7 @@ public class ResizeTask implements Runnable {
             am.s3$putObject(itemName, resized.getIs(), itemMetadata, CannedAccessControlList.PublicRead);
             am.sqs$deleteMessageAsync(message);
 
-        } catch (IOException | ArgumentException | AmazonS3Exception ex) {
+        } catch (ResizingException | ArgumentException | AmazonS3Exception ex) {
             // bad/forbidden task
             logger.log("MESSAGE_PROC_STOP", message.getBody(), ex.getClass().getName(), ex.getMessage());
 

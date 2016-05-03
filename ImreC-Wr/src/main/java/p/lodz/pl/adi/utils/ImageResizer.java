@@ -3,6 +3,7 @@ package p.lodz.pl.adi.utils;
 
 import com.amazonaws.services.devicefarm.model.ArgumentException;
 import org.imgscalr.Scalr;
+import p.lodz.pl.adi.exception.ResizingException;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -21,22 +22,27 @@ public class ImageResizer {
     };
 
     /**
-     * @throws IOException       if resizing failed due to IO
+     * @throws ResizingException if resizing failed due to IO
      * @throws ArgumentException if resizing failed due to arguments
      */
-    public InputStreamE resize(InputStream is, int sizeMultiplier, String imageType) throws IOException {
-        ensureImageType(imageType);
-        ensureSizeMultiplier(sizeMultiplier);
+    public InputStreamE resize(InputStream is, int sizeMultiplier, String imageType) throws ResizingException {
+        try {
+            ensureImageType(imageType);
+            ensureSizeMultiplier(sizeMultiplier);
 
-        BufferedImage srcImage = ImageIO.read(is);
+            BufferedImage srcImage = ImageIO.read(is);
 
-        double sizeMultiplier2 = sizeMultiplier / 100.0;
-        int newWidth = (int) (srcImage.getWidth() * sizeMultiplier2);
-        int newHeight = (int) (srcImage.getHeight() * sizeMultiplier2);
+            double sizeMultiplier2 = sizeMultiplier / 100.0;
+            int newWidth = (int) (srcImage.getWidth() * sizeMultiplier2);
+            int newHeight = (int) (srcImage.getHeight() * sizeMultiplier2);
 
-        BufferedImage scaledImage = Scalr.resize(srcImage, newWidth, newHeight);
+            BufferedImage scaledImage = Scalr.resize(srcImage, newWidth, newHeight);
 
-        return makeResult(scaledImage, imageType);
+            return makeResult(scaledImage, imageType);
+
+        } catch (IOException e) {
+            throw new ResizingException(e);
+        }
     }
 
     private InputStreamE makeResult(RenderedImage image, String imageType) throws IOException {
