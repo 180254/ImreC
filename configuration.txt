@@ -15,8 +15,8 @@ ImreC-Wr -- App2, Java, Worker
 3.3 Set that url in ImreC-[Cc,Wr]\conf.json
 
 How to start ImreC-Cc (choose one):
-* npm start
-* node bin/www
+* npm install && npm start
+* npm install && node bin/www
 
 How to start ImreC-Wr (choose one):
 * mvn exec:java
