@@ -24,5 +24,5 @@ How to start ImreC-Cc (choose one):
 * npm install && node bin/www
 
 How to start ImreC-Wr (choose one):
-* mvn exec:java
+* mvn compile exec:java
 * mvn package && java -jar target/imrec-worker-0.1-jar-with-dependencies.jar
