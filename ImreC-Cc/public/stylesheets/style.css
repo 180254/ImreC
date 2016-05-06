@@ -6,3 +6,20 @@ body {
 input {
     width: 200px;
 }
+
+#s3form {
+    display: flex;
+    flex-flow: column;
+}
+
+#s3form > #percentage {
+    order: 2;
+}
+
+#s3form > #given {
+    order: 1;
+}
+
+#s3form > #go {
+    order: 3;
+}

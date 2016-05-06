@@ -1,20 +1,24 @@
 extends ./base/layout.pug
 
 block content
-    form(action=s3url, method="post", enctype="multipart/form-data" class="form-horizontal")
+    h3 ImreC - #[b Im]age #[b re]sizer in (Amazon) #[b C]loud
+    h5 Supported image types: .png, .jpg, .bmp
+    br
+
+    form(action=s3url, method="post", enctype="multipart/form-data" class="form-horizontal" id="s3form")
         each key in s3fields
             input(type="hidden" name=key.name, value=key.value)
 
-        div(class="form-group")
-            label(for="x-amz-meta-newsize" class="col-sm-2 control-label") New size (percent)
+        div(class="form-group" id="percentage")
+            label(for="x-amz-meta-newsize" class="col-sm-2 control-label") Requested percentage of original
             div(class="col-sm-10")
                 input(type="number" name="x-amz-meta-newsize" id="x-amz-meta-newsize" min="1" max="200" value="50")
 
-        div(class="form-group")
-            label(for="file" class="col-sm-2 control-label") File to scale
+        div(class="form-group" id="given")
+            label(for="file" class="col-sm-2 control-label") File to resize
             div(class="col-sm-10")
                 input(type="file" name="file" id="file")
 
-        div(class="form-group")
+        div(class="form-group" id="go")
             div(class="col-sm-offset-2 col-sm-10")
                 input(type="submit" name="submit" value="Submit")
