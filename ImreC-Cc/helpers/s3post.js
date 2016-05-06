@@ -32,12 +32,12 @@ Policy.prototype.setFilenamePrefix = function (prefix) {
         prefix + this.policy.conditions[0][2];
 };
 
-Policy.prototype.setUploadedBy = function (uploadedBy) {
-    this.policy.conditions[6][2] = uploadedBy;
+Policy.prototype.setUploader = function (uploader) {
+    this.policy.conditions[6][2] = uploader;
 };
 
 Policy.prototype.setCollector = function (collector) {
-    this.policy.conditions[7][2] = collector;
+    this.policy.conditions[8][2] = collector;
 };
 
 Policy.prototype.generateEncodedPolicyDocument = function () {

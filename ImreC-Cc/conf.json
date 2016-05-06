@@ -17,21 +17,13 @@
         {"acl": "private"},
         {"success_action_redirect": "/task/schedule"},
         ["content-length-range", 1, 5242880],
-        ["eq", "$x-amz-meta-workstatus", "0"],
-        ["eq", "$x-amz-meta-uploadedby", ""],
-        [
-          "eq",
-          "$x-amz-meta-collector",
-          ""
-        ],
-        [
-          "eq",
-          "$x-amz-meta-scheduler",
-          "?"
-        ],
+        ["starts-with", "$x-amz-meta-filename", ""],
+        ["eq", "$x-amz-meta-uploader", ""],
+        ["starts-with", "$x-amz-meta-task", ""],
+        ["eq", "$x-amz-meta-collector", ""],
+        ["eq", "$x-amz-meta-scheduler", "?"],
         ["eq", "$x-amz-meta-worker", "?"],
-        ["starts-with", "$x-amz-meta-ofilename", ""],
-        ["starts-with", "$x-amz-meta-newsize", ""]
+        ["eq", "$x-amz-meta-status", "0"]
       ]
     }
   }

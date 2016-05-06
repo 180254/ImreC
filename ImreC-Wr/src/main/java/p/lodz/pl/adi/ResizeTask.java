@@ -8,7 +8,7 @@ import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.sqs.model.Message;
 import org.apache.commons.io.FilenameUtils;
 import p.lodz.pl.adi.enum1.Meta;
-import p.lodz.pl.adi.enum1.WorkStatus;
+import p.lodz.pl.adi.enum1.Status;
 import p.lodz.pl.adi.exception.ResizingException;
 import p.lodz.pl.adi.utils.AmazonHelper;
 import p.lodz.pl.adi.utils.ImageResizer;
@@ -47,15 +47,15 @@ public class ResizeTask implements Runnable {
             itemMetadataDackup = itemMetadata.clone();
 
             // interesting meta
-            String meta_newSize = itemMetadata.getUserMetaDataOf(Meta.NEW_SIZE);
-            String meta_oFilename = itemMetadata.getUserMetaDataOf(Meta.O_FILENAME);
-            String meta_workStatus = itemMetadata.getUserMetaDataOf(Meta.WORK_STATUS);
+            String meta_newSize = itemMetadata.getUserMetaDataOf(Meta.TASK);
+            String meta_oFilename = itemMetadata.getUserMetaDataOf(Meta.FILENAME);
+            String meta_workStatus = itemMetadata.getUserMetaDataOf(Meta.STATUS);
 
             // process only "scheduled"
-            if (!meta_workStatus.equals(WorkStatus.Scheduled.c())) {
+            if (!meta_workStatus.equals(Status.Scheduled.c())) {
                 logger.log("MESSAGE_PROC_STOP", message.getBody(), "status=" + meta_workStatus);
 
-                if (meta_workStatus.equals(WorkStatus.Done.c())) {
+                if (meta_workStatus.equals(Status.Done.c())) {
                     am.s3$deleteObject(itemName);
                 }
 
@@ -63,7 +63,7 @@ public class ResizeTask implements Runnable {
             }
 
             // mark as processing
-            copyWithNewStatus(itemName, itemMetadata, WorkStatus.Processing);
+            copyWithNewStatus(itemName, itemMetadata, Status.Processing);
 
             // resize!!
             InputStream object$is = itemObject.getObjectContent();
@@ -72,7 +72,7 @@ public class ResizeTask implements Runnable {
             InputStreamE resized = ir.resize(object$is, sizeMultiplier, imageType);
 
             // update metadata
-            itemMetadata.getUserMetadata().put(Meta.WORK_STATUS, WorkStatus.Done.c());
+            itemMetadata.getUserMetadata().put(Meta.STATUS, Status.Done.c());
             try {
                 itemMetadata.getUserMetadata().put(Meta.WORKER, InetAddress.getLocalHost().toString());
             } catch (UnknownHostException ignored) {
@@ -96,13 +96,13 @@ public class ResizeTask implements Runnable {
 
             // was may be marked as processing
             if (itemMetadataDackup != null) {
-                copyWithNewStatus(itemName, itemMetadataDackup, WorkStatus.Scheduled);
+                copyWithNewStatus(itemName, itemMetadataDackup, Status.Scheduled);
             }
         }
     }
 
-    private void copyWithNewStatus(String key, ObjectMetadata metadata, WorkStatus workStatus) {
-        metadata.getUserMetadata().put(Meta.WORK_STATUS, workStatus.c());
+    private void copyWithNewStatus(String key, ObjectMetadata metadata, Status status) {
+        metadata.getUserMetadata().put(Meta.STATUS, status.c());
         am.s3$copyObject(key, key, metadata, CannedAccessControlList.Private);
     }
 }

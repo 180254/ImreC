@@ -20,19 +20,19 @@ router.get('/', function (req, res, next) {
     var s3Policy = new s3post.Policy(conf.S3.Policy);
     s3Policy.setServer(server);
     s3Policy.setFilenamePrefix(uuid);
-    s3Policy.setUploadedBy(req.ip);
+    s3Policy.setUploader(req.ip);
     s3Policy.setCollector(selfIpCopy);
 
     var s3Form = new s3post.S3Form(s3Policy);
     var s3Fields = s3Form.getFieldsBase();
     s3Form.addS3FormFields(s3Fields, uuid + '_${filename}');
     s3Form.addS3CredentialsFields(s3Fields, confAws);
-    s3Form.setField(s3Fields, 'x-amz-meta-workstatus', '0');
+    s3Form.setField(s3Fields, 'x-amz-meta-filename', '${filename}');
+    s3Form.setField(s3Fields, 'x-amz-meta-uploader', req.ip);
     s3Form.setField(s3Fields, 'x-amz-meta-collector', selfIpCopy);
     s3Form.setField(s3Fields, 'x-amz-meta-scheduler', '?');
     s3Form.setField(s3Fields, 'x-amz-meta-worker', '?');
-    s3Form.setField(s3Fields, 'x-amz-meta-uploadedby', req.ip);
-    s3Form.setField(s3Fields, 'x-amz-meta-ofilename', '${filename}');
+    s3Form.setField(s3Fields, 'x-amz-meta-status', '0');
 
     res.render('index', {
         s3url: conf.S3.Url,

@@ -1,6 +1,6 @@
 package p.lodz.pl.adi.enum1;
 
-public enum WorkStatus {
+public enum Status {
 
     Uploaded("0"),
     Scheduled("1"),
@@ -9,7 +9,7 @@ public enum WorkStatus {
 
     private String code;
 
-    WorkStatus(String code) {
+    Status(String code) {
         this.code = code;
     }
 

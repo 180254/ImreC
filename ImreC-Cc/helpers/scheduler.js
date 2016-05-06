@@ -23,7 +23,7 @@ function scheduleTaskIfNew(req, scheduleParams) {
     };
 
     s3.headObject(headParams, function (err, data) {
-        if (!err && data.Metadata.workstatus === '0') {
+        if (!err && data.Metadata.status === '0') {
             var newMetadata = data.Metadata;
             newMetadata.scheduler = selfIp.ip();
 
@@ -52,7 +52,7 @@ function addSqsMessage(req, scheduleParams, callback) {
 
 function bumpProgress(req, scheduleParams, metadata) {
     metadata = utils.clone(metadata);
-    metadata.workstatus = (Number.parseInt(metadata.workstatus) + 1).toString();
+    metadata.status = (Number.parseInt(metadata.status) + 1).toString();
     var s3Policy = new s3post.Policy(conf.S3.Policy);
 
     var copyParams = {
