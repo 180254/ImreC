@@ -15,12 +15,15 @@ import java.util.concurrent.TimeUnit;
 
 public class App {
 
+    public static final int DEFAULT_SLEEP_SECONDS = 30;
+
     private final Logger logger;
 
     private final ImageResizer im;
     private final AmazonHelper am;
 
     private final ExecutorHelper executor;
+    private final int sleepSeconds;
 
     public App() throws IOException {
         Conf conf = CoProvider.getConf();
@@ -33,9 +36,28 @@ public class App {
         am.setLogger(logger); // circular dependency!?
 
         executor = new ExecutorHelper();
+        sleepSeconds = getSleepSeconds();
+    }
+
+    private int getSleepSeconds() {
+        String sleep = System.getenv("SSLEEP");
+        if (sleep == null) {
+            return DEFAULT_SLEEP_SECONDS;
+        }
+
+        try {
+            int sleep2 = Integer.parseInt(sleep);
+            if (sleep2 > 0) return sleep2;
+            else return DEFAULT_SLEEP_SECONDS;
+        } catch (NumberFormatException ignored) {
+            logger.log2("NOTE", "Env set but exception.");
+            return DEFAULT_SLEEP_SECONDS;
+        }
     }
 
     public void service() throws InterruptedException {
+        logger.log2("SLEEP_SECONDS", sleepSeconds);
+
         //noinspection InfiniteLoopStatement
         do {
             logger.log2("COMPLETED", executor.getCompletedTaskCount());
@@ -45,15 +67,15 @@ public class App {
 
             for (Message message : messages) {
                 Runnable resizeTask = new ResizeTask(message, logger, am, im);
-                resizeTask.run();
-//                executor.submit(resizeTask);
+//                resizeTask.run();
+                executor.submit(resizeTask);
             }
 
             if (messages.isEmpty()) {
                 logger.log2("NOP", executor.getActiveCount());
             }
 
-            TimeUnit.SECONDS.sleep(20);
+            TimeUnit.SECONDS.sleep(sleepSeconds);
         } while (true);
     }
 
