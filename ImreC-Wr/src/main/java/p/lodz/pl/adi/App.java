@@ -9,7 +9,11 @@ import p.lodz.pl.adi.utils.ExecutorHelper;
 import p.lodz.pl.adi.utils.ImageResizer;
 import p.lodz.pl.adi.utils.Logger;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -23,7 +27,9 @@ public class App {
     private final AmazonHelper am;
 
     private final ExecutorHelper executor;
+
     private final int sleepSeconds;
+    private final String selfIp;
 
     public App() throws IOException {
         Conf conf = CoProvider.getConf();
@@ -37,6 +43,7 @@ public class App {
 
         executor = new ExecutorHelper();
         sleepSeconds = getSleepSeconds();
+        selfIp = getSelfIp();
     }
 
     private int getSleepSeconds() {
@@ -55,8 +62,21 @@ public class App {
         }
     }
 
+    public String getSelfIp() throws IOException {
+        URL whatIsMyIp = new URL("http://checkip.amazonaws.com");
+
+        try (InputStream in = whatIsMyIp.openStream();
+             InputStreamReader in2 = new InputStreamReader(in);
+             BufferedReader in3 = new BufferedReader(in2)) {
+            return in3.readLine().trim();
+        } catch (IOException ignored) {
+            return "?";
+        }
+    }
+
     public void service() throws InterruptedException {
         logger.log2("SLEEP_SECONDS", sleepSeconds);
+        logger.log2("SELF_IP", selfIp);
 
         //noinspection InfiniteLoopStatement
         do {
@@ -66,7 +86,7 @@ public class App {
             List<Message> messages = am.sqs$receiveMessages(needTasks);
 
             for (Message message : messages) {
-                Runnable resizeTask = new ResizeTask(message, logger, am, im);
+                Runnable resizeTask = new ResizeTask(message, logger, am, im, selfIp);
 //                resizeTask.run();
                 executor.submit(resizeTask);
             }
@@ -83,4 +103,5 @@ public class App {
             throws IOException, InterruptedException {
         new App().service();
     }
+
 }

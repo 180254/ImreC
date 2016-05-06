@@ -16,8 +16,6 @@ import p.lodz.pl.adi.utils.InputStreamE;
 import p.lodz.pl.adi.utils.Logger;
 
 import java.io.InputStream;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 public class ResizeTask implements Runnable {
 
@@ -26,12 +24,14 @@ public class ResizeTask implements Runnable {
     private ImageResizer ir;
 
     private Message message;
+    private String selfIp;
 
-    public ResizeTask(Message message, Logger logger, AmazonHelper am, ImageResizer ir) {
+    public ResizeTask(Message message, Logger logger, AmazonHelper am, ImageResizer ir, String selfIp) {
         this.logger = logger;
         this.am = am;
         this.ir = ir;
         this.message = message;
+        this.selfIp = selfIp;
     }
 
     @Override
@@ -39,12 +39,12 @@ public class ResizeTask implements Runnable {
         logger.log("MESSAGE_PROC_START", message.getBody());
 
         String itemName = message.getBody();
-        ObjectMetadata itemMetadataDackup = null;
+        ObjectMetadata itemMetadataBackup = null;
 
         try {
             S3Object itemObject = am.s3$getObject(itemName);
             ObjectMetadata itemMetadata = itemObject.getObjectMetadata();
-            itemMetadataDackup = itemMetadata.clone();
+            itemMetadataBackup = itemMetadata.clone();
 
             // interesting meta
             String meta_newSize = itemMetadata.getUserMetaDataOf(Meta.TASK);
@@ -73,10 +73,7 @@ public class ResizeTask implements Runnable {
 
             // update metadata
             itemMetadata.getUserMetadata().put(Meta.STATUS, Status.Done.c());
-            try {
-                itemMetadata.getUserMetadata().put(Meta.WORKER, InetAddress.getLocalHost().toString());
-            } catch (UnknownHostException ignored) {
-            }
+            itemMetadata.getUserMetadata().put(Meta.WORKER, selfIp);
 
             itemMetadata.setContentLength(resized.getIsLength());
 
@@ -95,8 +92,8 @@ public class ResizeTask implements Runnable {
             logger.log("SOME_EXCEPTION", message.getBody(), ex.getClass().getName(), ex.getMessage());
 
             // was may be marked as processing
-            if (itemMetadataDackup != null) {
-                copyWithNewStatus(itemName, itemMetadataDackup, Status.Scheduled);
+            if (itemMetadataBackup != null) {
+                copyWithNewStatus(itemName, itemMetadataBackup, Status.Scheduled);
             }
         }
     }
