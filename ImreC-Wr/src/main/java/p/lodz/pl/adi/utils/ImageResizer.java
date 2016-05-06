@@ -17,8 +17,7 @@ import java.util.stream.Stream;
 public class ImageResizer {
 
     private final String[] PROPER_IMG_TYPES = {
-            "PNG", "GIF", "TIFF",
-            "JPG", "JPEG", "TIFF"
+            "PNG", "GIF", "BMP", "JPG", "JPEG",
     };
 
     /**
@@ -31,6 +30,9 @@ public class ImageResizer {
             ensureSizeMultiplier(sizeMultiplier);
 
             BufferedImage srcImage = ImageIO.read(is);
+            if (srcImage == null) {
+                throw new ResizingException("srcImage == null");
+            }
 
             double sizeMultiplier2 = sizeMultiplier / 100.0;
             int newWidth = (int) (srcImage.getWidth() * sizeMultiplier2);

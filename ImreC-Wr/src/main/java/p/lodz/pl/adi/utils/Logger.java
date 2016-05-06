@@ -30,7 +30,8 @@ public class Logger {
         String text = String.format("1 | %s | ? | %s", LocalDateTime.now().format(dtf), action);
 
         for (Object mes : args) {
-            text += String.format(" | %s", mes.toString());
+            String mesAsString = mes != null ? mes.toString() : "NULL";
+            text += String.format(" | %s", mesAsString);
         }
 
         System.out.println(text);
