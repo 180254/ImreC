@@ -6,21 +6,21 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class ConfSdb {
 
     private final String domain;
-    private final String logItemName;
+    private final String logItemPrefix;
 
     @JsonCreator
     public ConfSdb(@JsonProperty("Domain") String domain,
-                   @JsonProperty("LogItemName") String logItemName) {
+                   @JsonProperty("LogItemPrefix") String logItemPrefix) {
 
         this.domain = domain;
-        this.logItemName = logItemName;
+        this.logItemPrefix = logItemPrefix;
     }
 
     public String getDomain() {
         return domain;
     }
 
-    public String getLogItemName() {
-        return logItemName;
+    public String getLogItemPrefix() {
+        return logItemPrefix;
     }
 }

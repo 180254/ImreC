@@ -5,22 +5,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Conf {
 
-    private final ConfSdb simpleDb;
+    private final ConfSdb sdb;
     private final ConfSqs sqs;
     private final ConfS3 s3;
 
     @JsonCreator
-    public Conf(@JsonProperty("SimpleDb") ConfSdb simpleDb,
+    public Conf(@JsonProperty("Sdb") ConfSdb sdb,
                 @JsonProperty("Sqs") ConfSqs sqs,
                 @JsonProperty("S3") ConfS3 s3) {
 
-        this.simpleDb = simpleDb;
+        this.sdb = sdb;
         this.sqs = sqs;
         this.s3 = s3;
     }
 
-    public ConfSdb getSimpleDb() {
-        return simpleDb;
+    public ConfSdb getSdb() {
+        return sdb;
     }
 
     public ConfSqs getSqs() {

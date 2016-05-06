@@ -16,12 +16,14 @@ import com.amazonaws.services.sqs.model.Message;
 import com.amazonaws.services.sqs.model.ReceiveMessageRequest;
 import com.amazonaws.services.sqs.model.ReceiveMessageResult;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import p.lodz.pl.adi.config.Conf;
 import p.lodz.pl.adi.config.Config;
 
 import java.io.InputStream;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AmazonHelper {
 
@@ -102,13 +104,17 @@ public class AmazonHelper {
     }
 
 
-    public void sdb$putLogAsync(String text) {
+    public void sdb$putLogAsync(Collection<Pair<String, String>> attrs) {
+        List<ReplaceableAttribute> attrs2 =
+                attrs.stream()
+                        .map(attr -> new ReplaceableAttribute(attr.getKey(), attr.getValue(), true))
+                        .collect(Collectors.toList());
+
         String uuid = RandomStringUtils.randomAlphanumeric(LOG_ID_LENGTH);
-        ReplaceableAttribute attribute = new ReplaceableAttribute(uuid, text, true);
         PutAttributesRequest request = new PutAttributesRequest(
-                conf.getSimpleDb().getDomain(),
-                conf.getSimpleDb().getLogItemName(),
-                Collections.singletonList(attribute)
+                conf.getSdb().getDomain(),
+                conf.getSdb().getLogItemPrefix() + uuid,
+                attrs2
         );
 
         sdb.putAttributesAsync(request);

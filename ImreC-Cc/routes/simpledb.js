@@ -16,7 +16,7 @@ router.get('/', function (req, res, next) {
     res.setHeader('Content-Type', 'application/json');
 
     var params = {
-        SelectExpression: 'select * from ' + conf.SimpleDb.Domain
+        SelectExpression: 'select * from ' + conf.Sdb.Domain
     };
 
     simpleDb.select(params, function (err, data) {

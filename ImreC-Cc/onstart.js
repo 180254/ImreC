@@ -25,7 +25,7 @@ var onStart = function (callback) {
 };
 
 var simpleDbInit = function () {
-    var simpleDbParams = { DomainName: conf.SimpleDb.Domain };
+    var simpleDbParams = { DomainName: conf.Sdb.Domain };
 
     simpleDb.deleteDomain(simpleDbParams, function (err, data) {
         if (err) throw new Error(err.stack);
