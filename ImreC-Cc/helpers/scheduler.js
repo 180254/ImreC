@@ -3,6 +3,8 @@
 var logger = require('../helpers/logger');
 var utils = require('../helpers/utils');
 var s3post = require('../helpers/s3post');
+var selfIp = require('../helpers/selfip');
+
 var conf = utils.readJson('conf.json');
 
 var AWS = require('aws-sdk');
@@ -22,10 +24,14 @@ function scheduleTaskIfNew(req, scheduleParams) {
 
     s3.headObject(headParams, function (err, data) {
         if (!err && data.Metadata.workstatus === '0') {
+            var newMetadata = data.Metadata;
+            newMetadata.scheduler = selfIp.ip();
+
             addSqsMessage(req, scheduleParams, function () {
-                bumpProgress(req, scheduleParams, data.Metadata);
+                bumpProgress(req, scheduleParams, newMetadata);
             });
-            logger.log(req, 'TASK_NEW', scheduleParams.Key, JSON.stringify(data.Metadata));
+
+            logger.log(req, 'TASK_NEW', scheduleParams.Key, JSON.stringify(newMetadata));
         }
     });
 }

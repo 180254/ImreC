@@ -19,6 +19,16 @@
         ["content-length-range", 1, 5242880],
         ["eq", "$x-amz-meta-workstatus", "0"],
         ["eq", "$x-amz-meta-uploadedby", ""],
+        [
+          "eq",
+          "$x-amz-meta-collector",
+          ""
+        ],
+        [
+          "eq",
+          "$x-amz-meta-scheduler",
+          "?"
+        ],
         ["eq", "$x-amz-meta-worker", "?"],
         ["starts-with", "$x-amz-meta-ofilename", ""],
         ["starts-with", "$x-amz-meta-newsize", ""]

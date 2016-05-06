@@ -36,6 +36,10 @@ Policy.prototype.setUploadedBy = function (uploadedBy) {
     this.policy.conditions[6][2] = uploadedBy;
 };
 
+Policy.prototype.setCollector = function (collector) {
+    this.policy.conditions[7][2] = collector;
+};
+
 Policy.prototype.generateEncodedPolicyDocument = function () {
     return ciphers.encode(this.policy, 'base64');
 };
