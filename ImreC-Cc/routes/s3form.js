@@ -36,7 +36,8 @@ router.get('/', function (req, res, next) {
 
     res.render('index', {
         s3url: conf.S3.Url,
-        s3fields: s3Fields
+        s3fields: s3Fields,
+        selfIp: selfIpCopy
     });
 
     logger.log(req, 'REQ_FORM', utils.fullUrl(req))

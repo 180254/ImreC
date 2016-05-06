@@ -2,7 +2,9 @@ extends ./base/layout.pug
 
 block content
     h3 ImreC - #[b Im]age #[b re]sizer in (Amazon) #[b C]loud
-    h5 Supported image types: .png, .jpg, .bmp
+    p.
+        Hello from #{selfIp}#[br]
+        Supported image types: .png, .jpg, .bmp
     br
 
     form(action=s3url, method="post", enctype="multipart/form-data" class="form-horizontal" id="s3form")
