@@ -1,6 +1,5 @@
 package p.lodz.pl.adi.utils;
 
-
 import com.amazonaws.services.devicefarm.model.ArgumentException;
 import org.imgscalr.Scalr;
 import p.lodz.pl.adi.exception.ResizingException;

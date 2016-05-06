@@ -13,6 +13,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.InetAddress;
 import java.net.URL;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -47,7 +48,7 @@ public class App {
     }
 
     private int getSleepSeconds() {
-        String sleep = System.getenv("SSLEEP");
+        String sleep = System.getenv("CCSLEEP");
         if (sleep == null) {
             return DEFAULT_SLEEP_SECONDS;
         }
@@ -55,9 +56,12 @@ public class App {
         try {
             int sleep2 = Integer.parseInt(sleep);
             if (sleep2 > 0) return sleep2;
-            else return DEFAULT_SLEEP_SECONDS;
+            else {
+                logger.log2("SLEEP_NOTE", "Env set but <= 0.");
+                return DEFAULT_SLEEP_SECONDS;
+            }
         } catch (NumberFormatException ignored) {
-            logger.log2("NOTE", "Env set but exception.");
+            logger.log2("SLEEP_NOTE", "Env set but exception.");
             return DEFAULT_SLEEP_SECONDS;
         }
     }
@@ -69,8 +73,10 @@ public class App {
              InputStreamReader in2 = new InputStreamReader(in);
              BufferedReader in3 = new BufferedReader(in2)) {
             return in3.readLine().trim();
+
         } catch (IOException ignored) {
-            return "?";
+            logger.log2("IP_NOTE", "Cannot obtain external ip.");
+            return InetAddress.getLocalHost().toString();
         }
     }
 

@@ -32,13 +32,13 @@ public class Logger {
 
     private void logInternal(boolean sdbPut, String action, Object... args) {
         String text = String.format("1 | %s | ? | %s", LocalDateTime.now().format(dtf), action);
+
         for (Object mes : args) {
             String mesAsString = mes != null ? mes.toString() : "NULL";
             text += String.format(" | %s", mesAsString);
         }
 
         System.out.println(text);
-
 
         if (sdbPut) {
             Collection<Pair<String, String>> attrs = new ArrayList<>();
@@ -47,11 +47,9 @@ public class Logger {
             attrs.add(Pair.of("2_IP", "?"));
             attrs.add(Pair.of("3_Action", action));
 
-
             for (int i = 0; i < args.length; i++) {
                 Object mes = args[i];
                 String mesAsString = mes != null ? mes.toString() : "NULL";
-
                 attrs.add(Pair.of("4_Arg_" + i, mesAsString));
             }
 
