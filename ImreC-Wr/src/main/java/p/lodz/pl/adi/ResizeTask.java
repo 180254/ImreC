@@ -16,6 +16,8 @@ import p.lodz.pl.adi.utils.InputStreamE;
 import p.lodz.pl.adi.utils.Logger;
 
 import java.io.InputStream;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 public class ResizeTask implements Runnable {
 
@@ -71,6 +73,11 @@ public class ResizeTask implements Runnable {
 
             // update metadata
             itemMetadata.getUserMetadata().put(Meta.WORK_STATUS, WorkStatus.Done.c());
+            try {
+                itemMetadata.getUserMetadata().put(Meta.WORKER, InetAddress.getLocalHost().toString());
+            } catch (UnknownHostException ignored) {
+            }
+
             itemMetadata.setContentLength(resized.getIsLength());
 
             // work done

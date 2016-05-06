@@ -24,6 +24,7 @@ router.get('/', function (req, res, next) {
     s3Form.addS3FormFields(s3Fields, uuid + '_${filename}');
     s3Form.addS3CredentialsFields(s3Fields, confAws);
     s3Form.setField(s3Fields, 'x-amz-meta-workstatus', '0');
+    s3Form.setField(s3Fields, 'x-amz-meta-worker', '?');
     s3Form.setField(s3Fields, 'x-amz-meta-uploadedby', req.ip);
     s3Form.setField(s3Fields, 'x-amz-meta-ofilename', '${filename}');
 
