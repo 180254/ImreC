@@ -4,7 +4,7 @@ block content
     h3 Resize commission status
     ul
         li ID = #{id}
-        li URL = #[a(href=url)=url]
+        li #[abbr(title="Note: not downloadable until image resized.") URL] = #[a(href=url)=url]
         li Scale = #{scale}%
         li #[abbr(title="-Cc instance, which presented upload form") Collector] = #{collector}
         li #[abbr(title="-Cc instance, which scheduled new task in SQS") Scheduler] = #{scheduler}
