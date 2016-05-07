@@ -43,7 +43,7 @@ function currentDateFormatted() {
 
     return date.getUTCFullYear()
         + '-'
-        + utils.pad(date.getUTCMonth(), 2)
+        + utils.pad(date.getUTCMonth() + 1, 2)
         + '-'
         + utils.pad(date.getUTCDate(), 2)
         + ' '
