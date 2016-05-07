@@ -21,7 +21,7 @@ http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-lo
 2.2.2 Should be = 0 if Long Pooling is "disabled"
 
 2.3 [Imrec-Wr] Default sleep time between sqs query is 5s.
-2.3.1 Set env var if you want change it.
+2.3.1 Set env var called WRSLEEP if you want change it.
 
 3. Create S3 bucket.
 3.1 Set bucket file deletion policy in AWS console.

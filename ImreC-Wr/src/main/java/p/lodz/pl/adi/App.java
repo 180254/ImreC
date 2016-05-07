@@ -20,6 +20,7 @@ import java.util.concurrent.TimeUnit;
 
 public class App {
 
+    public static final String SLEEP_ENV_NAME = "WRSLEEP";
     public static final int DEFAULT_SLEEP_SECONDS = 5;
 
     private final Logger logger;
@@ -48,7 +49,7 @@ public class App {
     }
 
     private int getSleepSeconds() {
-        String sleep = System.getenv("CCSLEEP");
+        String sleep = System.getenv(SLEEP_ENV_NAME);
         if (sleep == null) {
             return DEFAULT_SLEEP_SECONDS;
         }
