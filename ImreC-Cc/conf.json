@@ -5,7 +5,7 @@
   },
   "Sqs": {
     "Url": "https://sqs.us-west-2.amazonaws.com/079592274660/Imrec-SQS",
-    "WaitTimeSeconds": 30
+    "WaitTimeSeconds": 20
   },
   "S3": {
     "Name": "imrec-bucket",
