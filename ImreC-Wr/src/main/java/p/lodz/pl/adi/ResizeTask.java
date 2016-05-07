@@ -19,6 +19,8 @@ import java.io.InputStream;
 
 public class ResizeTask implements Runnable {
 
+    public static final int VISIBILITY_NEW_TIMEOUT_SEC = 5;
+
     private Logger logger;
     private AmazonHelper am;
     private ImageResizer ir;
@@ -57,11 +59,7 @@ public class ResizeTask implements Runnable {
             // process only "scheduled"
             if (!meta_workStatus.equals(Status.Scheduled.c())) {
                 logger.log("MESSAGE_PROC_STOP", message.getBody(), "status=" + meta_workStatus);
-
-                if (meta_workStatus.equals(Status.Done.c())) {
-                    am.s3$deleteObject(itemName);
-                }
-
+                am.sqs$changeVisibilityTimeoutAsync(message, VISIBILITY_NEW_TIMEOUT_SEC);
                 return;
             }
 
@@ -98,6 +96,8 @@ public class ResizeTask implements Runnable {
             if (itemMetadataBackup != null) {
                 copyWithNewStatus(itemName, itemMetadataBackup, Status.Scheduled);
             }
+
+            am.sqs$changeVisibilityTimeoutAsync(message, VISIBILITY_NEW_TIMEOUT_SEC);
         }
 
         callback.run();

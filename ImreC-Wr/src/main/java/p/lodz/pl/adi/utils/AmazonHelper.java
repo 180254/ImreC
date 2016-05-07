@@ -11,10 +11,7 @@ import com.amazonaws.services.simpledb.model.PutAttributesRequest;
 import com.amazonaws.services.simpledb.model.ReplaceableAttribute;
 import com.amazonaws.services.sqs.AmazonSQSAsync;
 import com.amazonaws.services.sqs.AmazonSQSAsyncClient;
-import com.amazonaws.services.sqs.model.DeleteMessageRequest;
-import com.amazonaws.services.sqs.model.Message;
-import com.amazonaws.services.sqs.model.ReceiveMessageRequest;
-import com.amazonaws.services.sqs.model.ReceiveMessageResult;
+import com.amazonaws.services.sqs.model.*;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import p.lodz.pl.adi.config.Conf;
@@ -139,5 +136,16 @@ public class AmazonHelper {
         delRequest.setReceiptHandle(message.getReceiptHandle());
 
         sqs.deleteMessageAsync(delRequest);
+    }
+
+    public void sqs$changeVisibilityTimeoutAsync(Message message, int timeoutSeconds) {
+        logger$log("S3_CHANGE_VISIBILITY", message.getBody(), timeoutSeconds);
+
+        ChangeMessageVisibilityRequest changeRequest = new ChangeMessageVisibilityRequest();
+        changeRequest.setQueueUrl(conf.getSqs().getUrl());
+        changeRequest.setReceiptHandle(message.getReceiptHandle());
+        changeRequest.setVisibilityTimeout(timeoutSeconds);
+
+        sqs.changeMessageVisibilityAsync(changeRequest);
     }
 }
