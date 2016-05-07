@@ -15,14 +15,14 @@ var ip = function (req) {
 var log = function (req, action) {
     var attributes = [];
 
-    attributes.push({ Name: '0_Source', Value: '1' });
-    attributes.push({ Name: '1_Date', Value: new Date().toLocaleString() });
-    attributes.push({ Name: '2_IP', Value: ip(req) });
-    attributes.push({ Name: '3_Action', Value: action });
+    attributes.push({ Name: 'aSource', Value: '1' });
+    attributes.push({ Name: 'bDate', Value: currentDateFormatted() });
+    attributes.push({ Name: 'cIP', Value: ip(req) });
+    attributes.push({ Name: 'dAction', Value: action });
 
     if (arguments.length > 2) {
         for (var i = 2; i < arguments.length; i++) {
-            attributes.push({ Name: '4_Arg_' + (i - 2), Value: arguments[i] });
+            attributes.push({ Name: 'eArg_' + (i - 2), Value: arguments[i] });
         }
     }
 
@@ -37,5 +37,21 @@ var log = function (req, action) {
         if (err) console.log(err.stack);
     });
 };
+
+function currentDateFormatted() {
+    var date = new Date();
+
+    return date.getFullYear()
+        + '-'
+        + utils.pad(date.getMonth(), 2)
+        + '-'
+        + utils.pad(date.getDate(), 2)
+        + ' '
+        + utils.pad(date.getHours(), 2)
+        + ':'
+        + utils.pad(date.getMinutes(), 2)
+        + ':'
+        + utils.pad(date.getSeconds(), 2);
+}
 
 exports.log = log;

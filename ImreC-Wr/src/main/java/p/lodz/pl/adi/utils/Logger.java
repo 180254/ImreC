@@ -42,15 +42,15 @@ public class Logger {
 
         if (sdbPut) {
             Collection<Pair<String, String>> attrs = new ArrayList<>();
-            attrs.add(Pair.of("0_Source", "1"));
-            attrs.add(Pair.of("1_Date", LocalDateTime.now().format(dtf)));
-            attrs.add(Pair.of("2_IP", "?"));
-            attrs.add(Pair.of("3_Action", action));
+            attrs.add(Pair.of("aSource", "1"));
+            attrs.add(Pair.of("bDate", LocalDateTime.now().format(dtf)));
+            attrs.add(Pair.of("cIP", "?"));
+            attrs.add(Pair.of("dAction", action));
 
             for (int i = 0; i < args.length; i++) {
                 Object mes = args[i];
                 String mesAsString = mes != null ? mes.toString() : "NULL";
-                attrs.add(Pair.of("4_Arg_" + i, mesAsString));
+                attrs.add(Pair.of("eArg_" + i, mesAsString));
             }
 
             am.sdb$putLogAsync(attrs);

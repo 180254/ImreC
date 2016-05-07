@@ -17,14 +17,29 @@ router.get('/', function (req, res, next) {
 
     var params = {
         SelectExpression: 'select * from ' + conf.Sdb.Domain
+        + ' where bDate like "%"'
+        + ' order by bDate desc'
     };
 
     simpleDb.select(params, function (err, data) {
         if (err) res.send(JSON.stringify(err.stack, null, ' '));
-        else     res.send(JSON.stringify(data, null, ' '));
+        else {
+            sortAttributesInResult(data);
+            res.send(JSON.stringify(data, null, ' '));
+        }
     });
 
     logger.log(req, 'REQ_SDB_CHECK_LOG', utils.fullUrl(req))
 });
+
+function sortAttributesInResult(data) {
+    if (data.Items) {
+        for (var i = 0; i < data.Items.length; i++) {
+            data.Items[i].Attributes.sort(function (a, b) {
+                return a.Name.localeCompare(b.Name);
+            });
+        }
+    }
+}
 
 module.exports = router;
