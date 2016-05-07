@@ -56,10 +56,12 @@ public class ResizeTask implements Runnable {
             String meta_oFilename = itemMetadata.getUserMetaDataOf(Meta.FILENAME);
             String meta_workStatus = itemMetadata.getUserMetaDataOf(Meta.STATUS);
 
-            // process only "scheduled"
+            // process only "scheduled", other status = ?!?
             if (!meta_workStatus.equals(Status.Scheduled.c())) {
-                logger.log("MESSAGE_PROC_STOP", message.getBody(), "status=" + meta_workStatus);
-                am.sqs$changeVisibilityTimeoutAsync(message, VISIBILITY_NEW_TIMEOUT_SEC);
+                logger.log("MESSAGE_PROC_STOP_B", message.getBody(), "status=" + meta_workStatus);
+
+                am.s3$deleteObject(itemName);
+                am.sqs$deleteMessageAsync(message);
                 return;
             }
 
@@ -84,7 +86,7 @@ public class ResizeTask implements Runnable {
 
         } catch (ResizingException | ArgumentException | AmazonS3Exception ex) {
             // bad/forbidden task
-            logger.log("MESSAGE_PROC_STOP", message.getBody(), ex.getClass().getName(), ex.getMessage());
+            logger.log("MESSAGE_PROC_STOP_A", message.getBody(), ex.getClass().getName(), ex.getMessage());
 
             am.s3$deleteObject(itemName);
             am.sqs$deleteMessageAsync(message);
