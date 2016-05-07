@@ -62,6 +62,8 @@ public class ResizeTask implements Runnable {
 
                 am.s3$deleteObject(itemName);
                 am.sqs$deleteMessageAsync(message);
+
+                callback.run();
                 return;
             }
 

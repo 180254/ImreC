@@ -94,7 +94,9 @@ public class App {
             for (Message message : messages) {
                 Runnable resizeTask = new ResizeTask(
                         message, logger, am, im, selfIp,
-                        () -> logger.log2("COMPLETED", executor.getCompletedTaskCount() + 1)
+                        () -> logger.log2("SERVICE",
+                                executor.getCompletedTaskCount() + 1,
+                                executor.getActiveCount() - 1)
                 );
 //                resizeTask.run();
                 executor.submit(resizeTask);
