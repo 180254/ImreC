@@ -2,16 +2,16 @@ extends ../base/layout.pug
 
 block content
     h3 Resize commission status
-    p
-        ul
-            li ID = #{id}
-            li URL = #[a(href=url)=url]
-            li Scale = #{scale}%
-            li Collector = #{collector}
-            li Scheduler = #{scheduler}
-            li Worker = #{worker}
-            li Status = #[b=status]
+    ul
+        li ID = #{id}
+        li URL = #[a(href=url)=url]
+        li Scale = #{scale}%
+        li #[abbr(title="-Cc instance, which presented upload form") Collector] = #{collector}
+        li #[abbr(title="-Cc instance, which scheduled new task in SQS") Scheduler] = #{scheduler}
+        li #[abbr(title="-Wr instance, which resized image") Worker] = #{worker}
+        li Status = #[b=status]
 
-    a(href="#" class="reload") Refresh (#[b F5]).
-    br
-    a(href="/") Go back.
+    p
+        a(href="#" class="reload") Refresh (#[b F5]).
+        br
+        a(href="/") Go back.

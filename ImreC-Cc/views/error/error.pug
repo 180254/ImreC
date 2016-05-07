@@ -1,0 +1,9 @@
+extends ../base/layout.pug
+
+block title
+    title ImreC Error
+
+block content
+    h1=message
+    h2=error.status
+    pre #{error.stack}
