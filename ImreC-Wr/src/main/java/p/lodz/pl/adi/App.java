@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 
 public class App {
 
-    public static final int DEFAULT_SLEEP_SECONDS = 30;
+    public static final int DEFAULT_SLEEP_SECONDS = 5;
 
     private final Logger logger;
 

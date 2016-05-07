@@ -123,6 +123,7 @@ public class AmazonHelper {
     public List<Message> sqs$receiveMessages(int howMany) {
         ReceiveMessageRequest request = new ReceiveMessageRequest();
         request.setQueueUrl(conf.getSqs().getUrl());
+        request.setWaitTimeSeconds(conf.getSqs().getWaitTimeSeconds());
         request.setVisibilityTimeout(VISIBILITY_TIMEOUT);
         request.setMaxNumberOfMessages(howMany);
 
