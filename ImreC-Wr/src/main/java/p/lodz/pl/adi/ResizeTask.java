@@ -25,13 +25,16 @@ public class ResizeTask implements Runnable {
 
     private Message message;
     private String selfIp;
+    private Runnable callback;
 
-    public ResizeTask(Message message, Logger logger, AmazonHelper am, ImageResizer ir, String selfIp) {
+    public ResizeTask(Message message, Logger logger, AmazonHelper am,
+                      ImageResizer ir, String selfIp, Runnable callback) {
         this.logger = logger;
         this.am = am;
         this.ir = ir;
         this.message = message;
         this.selfIp = selfIp;
+        this.callback = callback;
     }
 
     @Override
@@ -96,6 +99,8 @@ public class ResizeTask implements Runnable {
                 copyWithNewStatus(itemName, itemMetadataBackup, Status.Scheduled);
             }
         }
+
+        callback.run();
     }
 
     private void copyWithNewStatus(String key, ObjectMetadata metadata, Status status) {

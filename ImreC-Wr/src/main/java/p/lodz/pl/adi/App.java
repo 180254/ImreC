@@ -86,19 +86,17 @@ public class App {
 
         //noinspection InfiniteLoopStatement
         do {
-            logger.log2("COMPLETED", executor.getCompletedTaskCount());
 
             int needTasks = executor.needTasks();
             List<Message> messages = am.sqs$receiveMessages(needTasks);
 
             for (Message message : messages) {
-                Runnable resizeTask = new ResizeTask(message, logger, am, im, selfIp);
+                Runnable resizeTask = new ResizeTask(
+                        message, logger, am, im, selfIp,
+                        () -> logger.log2("COMPLETED", executor.getCompletedTaskCount() + 1)
+                );
 //                resizeTask.run();
                 executor.submit(resizeTask);
-            }
-
-            if (messages.isEmpty()) {
-                logger.log2("NOP", executor.getActiveCount());
             }
 
             TimeUnit.SECONDS.sleep(sleepSeconds);
