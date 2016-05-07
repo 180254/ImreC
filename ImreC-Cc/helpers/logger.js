@@ -41,17 +41,17 @@ var log = function (req, action) {
 function currentDateFormatted() {
     var date = new Date();
 
-    return date.getFullYear()
+    return date.getUTCFullYear()
         + '-'
-        + utils.pad(date.getMonth(), 2)
+        + utils.pad(date.getUTCMonth(), 2)
         + '-'
-        + utils.pad(date.getDate(), 2)
+        + utils.pad(date.getUTCDate(), 2)
         + ' '
-        + utils.pad(date.getHours(), 2)
+        + utils.pad(date.getUTCHours(), 2)
         + ':'
-        + utils.pad(date.getMinutes(), 2)
+        + utils.pad(date.getUTCMinutes(), 2)
         + ':'
-        + utils.pad(date.getSeconds(), 2);
+        + utils.pad(date.getUTCSeconds(), 2);
 }
 
 exports.log = log;

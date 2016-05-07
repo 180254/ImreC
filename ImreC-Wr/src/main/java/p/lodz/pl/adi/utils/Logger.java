@@ -4,6 +4,7 @@ import com.amazonaws.AmazonClientException;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -43,7 +44,7 @@ public class Logger {
         if (sdbPut) {
             Collection<Pair<String, String>> attrs = new ArrayList<>();
             attrs.add(Pair.of("aSource", "1"));
-            attrs.add(Pair.of("bDate", LocalDateTime.now().format(dtf)));
+            attrs.add(Pair.of("bDate", LocalDateTime.now(ZoneOffset.UTC).format(dtf)));
             attrs.add(Pair.of("cIP", "?"));
             attrs.add(Pair.of("dAction", action));
 
