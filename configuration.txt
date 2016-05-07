@@ -1,4 +1,4 @@
-ImreC-Cc -- App1, NodeJS, Web app: commission collector
+ImreC-Cc -- App1, NodeJS, Web app: commission collector, task scheduler
 ImreC-Wr -- App2, Java, Worker
 
 0.1 Put config.json in ImreC-[Cc,Wr]\
