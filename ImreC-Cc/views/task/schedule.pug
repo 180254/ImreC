@@ -1,9 +1,14 @@
 extends ../base/layout.pug
 
+block meta
+    meta(http-equiv="refresh" content="5;url=/task?id=" + Key)
+
 block content
     h2 Successfully scheduled!
 
     p
         a(href="/task?id=" + Key) Your task status is available here.
+        br
+        span You will be redirected to status automatically in 5 seconds.
         br
         a(href="/") Go back.

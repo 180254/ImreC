@@ -19,7 +19,7 @@ var readJson = function (fileName) {
 // http://stackoverflow.com/posts/2117523/revisions
 var uuid = function () {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
     });
 };
@@ -36,7 +36,7 @@ var clone = function (obj) {
     var copy;
 
     // Handle the 3 simple types, and null or undefined
-    if (null == obj || 'object' != typeof obj) return obj;
+    if (null === obj || 'object' !== typeof obj) return obj;
 
     // Handle Date
     if (obj instanceof Date) {
@@ -69,7 +69,7 @@ var clone = function (obj) {
 // credits: friends @ stackoverflow
 // http://stackoverflow.com/questions/10183291/how-to-get-the-full-url-in-express
 var fullUrl = function (req) {
-    if (req == null) return null;
+    if (!req) return null;
     return url.format({
         protocol: req.protocol,
         host: req.get('host'),
@@ -79,11 +79,11 @@ var fullUrl = function (req) {
 
 // credits: friends @ stackoverflow
 // http://stackoverflow.com/questions/10073699/pad-a-number-with-leading-zeros-in-javascript
-function pad(n, width, z) {
+var pad = function (n, width, z) {
     z = z || '0';
     n = n + '';
     return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
-}
+};
 
 exports.readJson = readJson;
 exports.uuid = uuid;

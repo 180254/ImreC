@@ -29,10 +29,10 @@ router.get('/', function (req, res, next) {
         }
     });
 
-    logger.log(req, 'REQ_SDB_CHECK_LOG', utils.fullUrl(req))
+    logger.log(req, 'REQ_SDB', utils.fullUrl(req))
 });
 
-function sortAttributesInResult(data) {
+var sortAttributesInResult = function (data) {
     if (data.Items) {
         for (var i = 0; i < data.Items.length; i++) {
             data.Items[i].Attributes.sort(function (a, b) {
@@ -40,6 +40,6 @@ function sortAttributesInResult(data) {
             });
         }
     }
-}
+};
 
 module.exports = router;

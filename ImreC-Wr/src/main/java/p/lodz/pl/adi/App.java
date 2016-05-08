@@ -62,7 +62,7 @@ public class App {
                 return DEFAULT_SLEEP_SECONDS;
             }
         } catch (NumberFormatException ignored) {
-            logger.log2("SLEEP_NOTE", "Env set but exception.");
+            logger.log2("SLEEP_SECONDS", "Env set but exception.");
             return DEFAULT_SLEEP_SECONDS;
         }
     }
@@ -76,7 +76,7 @@ public class App {
             return in3.readLine().trim();
 
         } catch (IOException ignored) {
-            logger.log2("IP_NOTE", "Cannot obtain external ip.");
+            logger.log2("SELF_IP", "Cannot obtain external ip.");
             return InetAddress.getLocalHost().toString();
         }
     }

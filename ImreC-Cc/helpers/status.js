@@ -30,6 +30,7 @@ var getStatus = function (bucketKey, callbackOk, callbackFail) {
                 url: conf.S3.Url + '/' + bucketKey,
                 scale: data.Metadata.task,
                 status: statusDescriptions[Number.parseInt(data.Metadata.status)],
+                isDone: data.Metadata.status === '3',
                 collector: data.Metadata.collector,
                 scheduler: data.Metadata.scheduler,
                 worker: data.Metadata.worker

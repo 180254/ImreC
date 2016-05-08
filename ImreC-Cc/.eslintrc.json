@@ -7,24 +7,10 @@
   },
   "rules": {
     "no-console": 0,
-    "strict": [
-      "error",
-      "global"
-    ],
-    "no-unused-vars": [
-      "error",
-      {
-        "vars": "all",
-        "args": "none"
-      }
-    ],
-    "quotes": [
-      "error",
-      "single",
-      {
-        "avoidEscape": true,
-        "allowTemplateLiterals": true
-      }
-    ]
+    "strict": ["error", "global"],
+    "no-unused-vars": ["error", {"vars": "all", "args": "none"}],
+    "quotes": ["error", "single", {"avoidEscape": true, "allowTemplateLiterals": true}],
+    "eqeqeq": ["error"],
+    "func-style": ["error", "expression"]
   }
 }

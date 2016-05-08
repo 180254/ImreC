@@ -96,7 +96,7 @@ S3Form.prototype.addS3CredentialsFields = function (fields, awsConfig) {
 
 S3Form.prototype.setField = function (fields, name, value) {
     for (var i = 0, len = fields.length; i < len; i++) {
-        if (fields[i].name == name) {
+        if (fields[i].name === name) {
             fields[i].value = value;
             return;
         }

@@ -58,7 +58,7 @@ public class ResizeTask implements Runnable {
 
             // process only "scheduled", other status = ?!?
             if (!meta_workStatus.equals(Status.Scheduled.c())) {
-                logger.log("MESSAGE_PROC_STOP_B", message.getBody(), "status=" + meta_workStatus);
+                logger.log("MESSAGE_PROC_STOP", "REASON=B", message.getBody(), "status=" + meta_workStatus);
 
                 am.s3$deleteObject(itemName);
                 am.sqs$deleteMessageAsync(message);
@@ -88,7 +88,7 @@ public class ResizeTask implements Runnable {
 
         } catch (ResizingException | ArgumentException | AmazonS3Exception ex) {
             // bad/forbidden task
-            logger.log("MESSAGE_PROC_STOP_A", message.getBody(), ex.getClass().getName(), ex.getMessage());
+            logger.log("MESSAGE_PROC_STOP", "REASON=A", message.getBody(), ex.getClass().getName(), ex.getMessage());
 
             am.s3$deleteObject(itemName);
             am.sqs$deleteMessageAsync(message);

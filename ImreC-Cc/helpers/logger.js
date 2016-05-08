@@ -8,7 +8,7 @@ AWS.config.loadFromPath('./config.json');
 var sdb = new AWS.SimpleDB();
 
 var ip = function (req) {
-    if (req == null) return 'null';
+    if (!req) return '?';
     return req.ip;
 };
 
@@ -38,7 +38,7 @@ var log = function (req, action) {
     });
 };
 
-function currentDateFormatted() {
+var currentDateFormatted = function () {
     var date = new Date();
 
     return date.getUTCFullYear()
@@ -52,6 +52,6 @@ function currentDateFormatted() {
         + utils.pad(date.getUTCMinutes(), 2)
         + ':'
         + utils.pad(date.getUTCSeconds(), 2);
-}
+};
 
 exports.log = log;
