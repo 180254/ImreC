@@ -14,19 +14,23 @@ ImreC-Wr -- App2, Java, Worker
 2. Create SQS.
 2.1 Set that url in ImreC-[Cc,Wr]\conf.json
 
-2.2 Optional: Enable Long Pooling
+2.2 Configure SQS Long Pooling
 http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-long-polling.html
 
 2.2.1 Set Receive Message Wait Time as WaitTimeSeconds in ImreC-[Cc,Wr]\conf.json
 2.2.2 Should be = 0 if Long Pooling is "disabled"
 
-2.3 [Imrec-Wr] Default sleep time between sqs query is 5s.
+2.3 Note: [Imrec-Wr] Default sleep time between sqs query is 5s.
 2.3.1 Set env var called WRSLEEP if you want change it.
 
 3. Create S3 bucket.
 3.1 Set bucket file deletion policy in AWS console.
 3.2 Set that name in ImreC-[Cc,Wr]\conf.json
 3.3 Set that url in ImreC-[Cc,Wr]\conf.json
+
+4.1. Create AMI for ImreC-[Cc,Wr]
+4.2. Add ASG for ImreC-[Cc,Wr]
+4.3. Add ELB for ImreC-Cc
 
 How to start ImreC-Cc (choose one):
 * npm install && npm start
@@ -35,3 +39,17 @@ How to start ImreC-Cc (choose one):
 How to start ImreC-Wr (choose one):
 * mvn compile exec:java
 * mvn package && java -jar target/imrec-worker-0.1-jar-with-dependencies.jar
+
+Example of start (init.d) stripts:
+#!/bin/bash
+/etc/init.d/bitnami stop
+cd /home/bitnami/ImreC/ImreC-Cc
+/opt/bitnami/git/bin/git pull origin master
+/opt/bitnami/nodejs/bin/npm install
+/usr/bin/screen -dm /opt/bitnami/nodejs/bin/npm start
+
+#!/bin/bash
+/etc/init.d/bitnami stop
+cd /home/bitnami/ImreC/ImreC-Wr
+/opt/bitnami/git/bin/git pull origin master
+/usr/bin/screen -dm /usr/bin/mvn compile exec:java
