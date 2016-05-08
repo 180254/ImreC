@@ -27,8 +27,8 @@ function scheduleTaskIfNew(req, scheduleParams) {
             var newMetadata = data.Metadata;
             newMetadata.scheduler = selfIp.ip();
 
-            addSqsMessage(req, scheduleParams, function () {
-                bumpProgress(req, scheduleParams, newMetadata);
+            bumpProgress(req, scheduleParams, newMetadata, function () {
+                addSqsMessage(req, scheduleParams);
             });
 
             logger.log(req, 'TASK_NEW', scheduleParams.Key, JSON.stringify(newMetadata));
@@ -36,21 +36,24 @@ function scheduleTaskIfNew(req, scheduleParams) {
     });
 }
 
-function addSqsMessage(req, scheduleParams, callback) {
+function addSqsMessage(req, scheduleParams) {
     var params = {
         MessageBody: scheduleParams.Key,
         QueueUrl: conf.Sqs.Url
     };
     sqs.sendMessage(params, function (err, data) {
-        if (err) console.log(err.stack);
+        if (err) {
+            deleteObject(req, scheduleParams);
+            logger.log(req, 'ERROR', 'TASK_SQS', JSON.stringify(err.stack));
+            console.log(err.stack);
+        }
         else {
-            callback();
             logger.log(req, 'TASK_SQS', scheduleParams.Key);
         }
     });
 }
 
-function bumpProgress(req, scheduleParams, metadata) {
+function bumpProgress(req, scheduleParams, metadata, callback) {
     metadata = utils.clone(metadata);
     metadata.status = (Number.parseInt(metadata.status) + 1).toString();
     var s3Policy = new s3post.Policy(conf.S3.Policy);
@@ -65,9 +68,35 @@ function bumpProgress(req, scheduleParams, metadata) {
     };
 
     s3.copyObject(copyParams, function (err, data) {
-        if (err) console.log(err.stack);
-        else     logger.log(req, 'TASK_STATUS=1', scheduleParams.Key);
+        if (err) {
+            deleteObject(req, scheduleParams);
+            logger.log(req, 'ERROR', 'BUMP_TASK_STATUS', JSON.stringify(err.stack));
+            console.log(err.stack);
+        }
+        else {
+            callback();
+            logger.log(req, 'BUMP_TASK_STATUS', scheduleParams.Key, metadata.status);
+        }
     });
+}
+
+function deleteObject(req, scheduleParams) {
+
+    var params = {
+        Bucket: scheduleParams.Bucket,
+        Key: scheduleParams.Key
+    };
+
+    s3.deleteObject(params, function (err, data) {
+        if (err) {
+            logger.log(req, 'S3_OBJECT_DELETE_ERR', scheduleParams.Key, JSON.stringify(err.stack));
+            console.log(err.stack);
+        }
+        else {
+            logger.log(req, 'S3_OBJECT_DELETE', scheduleParams.Key);
+        }
+    });
+
 }
 
 exports.scheduleTaskIfNew = scheduleTaskIfNew;
