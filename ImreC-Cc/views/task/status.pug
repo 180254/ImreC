@@ -2,16 +2,35 @@ extends ../base/layout.pug
 
 block content
     h3 Resize commission status
-    ul
-        li ID = #{id}
-        li #[abbr(title="Note: not downloadable until image resized.") URL] = #[a(href=url)=url]
-        li Scale = #{scale}%
-        li #[abbr(title="-Cc instance, which presented upload form") Collector] = #{collector}
-        li #[abbr(title="-Cc instance, which scheduled new task in SQS") Scheduler] = #{scheduler}
-        li #[abbr(title="-Wr instance, which resized image") Worker] = #{worker}
-        li Status = #[b=status]
+    table(class="table table-striped")
+        tr
+            td Task ID
+            td(class="breakable")=id
+        tr
+            td
+                abbr(title="Note: not downloadable until image resized.") URL
+            td
+                a(href=url class="breakable ")=url
+        tr
+            td Scale
+            td=scale + '%'
+        tr
+            td
+                abbr(title="-Cc instance, which presented upload form") Collector
+            td=collector
+        tr
+            td
+                abbr(title="-Cc instance, which scheduled new task in SQS") Scheduler
+            td=scheduler
+        tr
+            td
+                abbr(title="-Wr instance, which resized image") Worker
+            td=worker
+        tr
+            td Status
+            td
+                b=status
 
     p
-        a(href="#" class="reload") Refresh (#[b F5]).
-        br
+        a(href="#" class="reload") Refresh (#[b F5]).#[br]
         a(href="/") Go back.

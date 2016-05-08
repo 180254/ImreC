@@ -1,11 +1,12 @@
 extends ./base/layout.pug
 
 block content
-    h3 ImreC - #[b Im]age #[b re]sizer in (Amazon) #[b C]loud
+    h3 ImreC&nbsp;- #[b Im]age&nbsp;#[b re]sizer in&nbsp;(Amazon)&nbsp;#[b C]loud
 
     p.
         Hello from #{selfIp}#[br]
-        Supported image types: .png, .jpg, .bmp
+        Supported&nbsp;image&nbsp;types: .png,&nbsp;.jpg,&nbsp;.bmp#[br]
+        Supported&nbsp;scale&nbsp;range: from&nbsp;1%&nbsp;to&nbsp;200%
     br
 
     form(action=s3url, method="post", enctype="multipart/form-data" class="form-horizontal" id="s3form")
@@ -13,15 +14,19 @@ block content
             input(type="hidden" name=key.name, value=key.value)
 
         div(class="form-group" id="percentage")
-            label(for="x-amz-meta-task" class="col-sm-2 control-label") Requested percentage of original
-            div(class="col-sm-10")
-                input(type="number" name="x-amz-meta-task" id="x-amz-meta-task" min="1" max="200" value="50")
+            label(for="x-amz-meta-task" class="col-md-3 control-label") Requested scale (%)
+            div(class="col-md-3")
+                input(type="text"
+                name="x-amz-meta-task" id="x-amz-meta-task"
+                data-slider-min="1" data-slider-max="200" data-slider-step="1" data-slider-value="75"
+                class="form-control" required="required")
 
         div(class="form-group" id="given")
-            label(for="file" class="col-sm-2 control-label") File to resize
-            div(class="col-sm-10")
-                input(type="file" name="file" id="file")
+            label(for="file" class="col-md-3 control-label") File to resize
+            div(class="col-md-3")
+                input(type="file" name="file" id="file"  required="required"
+                class="file" data-show-preview="false" data-show-upload="false" data-show-remove="false")
 
         div(class="form-group" id="go")
-            div(class="col-sm-offset-2 col-sm-10")
-                input(type="submit" name="submit" value="Submit")
+            div(class="col-md-offset-3 col-md-3")
+                input(type="submit" name="submit" value="Submit" class="form-control")

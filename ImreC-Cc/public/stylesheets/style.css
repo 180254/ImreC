@@ -23,3 +23,12 @@ input {
 #s3form > #go {
     order: 3;
 }
+
+.breakable {
+    word-wrap: break-word;
+    word-break: break-all;
+}
+
+.slider-horizontal {
+    width: 100% !important;
+}
