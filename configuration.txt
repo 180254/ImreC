@@ -28,7 +28,7 @@ http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-lo
 3.2 Set that name in ImreC-[Cc,Wr]\conf.json
 3.3 Set that url in ImreC-[Cc,Wr]\conf.json
 
-4.1. Create AMI for ImreC-[Cc,Wr]
+4.1. Prepare AMI for ImreC-[Cc,Wr]
 4.2. Add ASG for ImreC-[Cc,Wr]
 4.3. Add ELB for ImreC-Cc
 
