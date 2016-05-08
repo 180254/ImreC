@@ -36,16 +36,16 @@ public class App {
     public App() throws IOException {
         Conf conf = CoProvider.getConf();
         Config config = CoProvider.getConfig();
+        selfIp = getSelfIp();
 
         am = new AmazonHelper(config, conf);
-        logger = new Logger(am);
+        logger = new Logger(am, selfIp);
         im = new ImageResizer();
 
         am.setLogger(logger); // circular dependency!?
 
         executor = new ExecutorHelper();
         sleepSeconds = getSleepSeconds();
-        selfIp = getSelfIp();
     }
 
     private int getSleepSeconds() {

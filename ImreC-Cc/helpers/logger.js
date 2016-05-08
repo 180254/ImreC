@@ -1,6 +1,8 @@
 'use strict';
 
 var utils = require('../helpers/utils');
+var selfIp = require('../helpers/selfip');
+
 var conf = utils.readJson('conf.json');
 
 var AWS = require('aws-sdk');
@@ -15,7 +17,7 @@ var ip = function (req) {
 var log = function (req, action) {
     var attributes = [];
 
-    attributes.push({ Name: 'aSource', Value: '1' });
+    attributes.push({ Name: 'aSource', Value: 'Cc/' + selfIp.ip() });
     attributes.push({ Name: 'bDate', Value: currentDateFormatted() });
     attributes.push({ Name: 'cIP', Value: ip(req) });
     attributes.push({ Name: 'dAction', Value: action });

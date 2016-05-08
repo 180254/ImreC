@@ -12,10 +12,13 @@ import java.util.Collection;
 public class Logger {
 
     private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    private final AmazonHelper am;
 
-    public Logger(AmazonHelper am) {
+    private final AmazonHelper am;
+    private String selfIp;
+
+    public Logger(AmazonHelper am, String selfIp) {
         this.am = am;
+        this.selfIp = selfIp;
     }
 
     public void log(String action, Object... args) {
@@ -43,7 +46,7 @@ public class Logger {
 
         if (sdbPut) {
             Collection<Pair<String, String>> attrs = new ArrayList<>();
-            attrs.add(Pair.of("aSource", "1"));
+            attrs.add(Pair.of("aSource", "Wr/" + selfIp));
             attrs.add(Pair.of("bDate", LocalDateTime.now(ZoneOffset.UTC).format(dtf)));
             attrs.add(Pair.of("cIP", "?"));
             attrs.add(Pair.of("dAction", action));
