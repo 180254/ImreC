@@ -1,6 +1,5 @@
 package p.lodz.pl.adi;
 
-import com.amazonaws.services.devicefarm.model.ArgumentException;
 import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
@@ -86,7 +85,7 @@ public class ResizeTask implements Runnable {
             am.s3$putObject(itemName, resized.getIs(), itemMetadata, CannedAccessControlList.PublicRead);
             am.sqs$deleteMessageAsync(message);
 
-        } catch (ResizingException | ArgumentException | AmazonS3Exception ex) {
+        } catch (ResizingException | IllegalArgumentException | AmazonS3Exception ex) {
             // bad/forbidden task
             logger.log("MESSAGE_PROC_STOP", "REASON=A", message.getBody(), ex.getClass().getName(), ex.getMessage());
 

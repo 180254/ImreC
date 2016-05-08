@@ -1,6 +1,5 @@
 package p.lodz.pl.adi.utils;
 
-import com.amazonaws.services.devicefarm.model.ArgumentException;
 import org.imgscalr.Scalr;
 import p.lodz.pl.adi.exception.ResizingException;
 
@@ -21,7 +20,7 @@ public class ImageResizer {
 
     /**
      * @throws ResizingException if resizing failed due to IO
-     * @throws ArgumentException if resizing failed due to arguments
+     * @throws IllegalArgumentException if resizing failed due to arguments
      */
     public InputStreamE resize(InputStream is, int sizeMultiplier, String imageType) throws ResizingException {
         try {
@@ -58,13 +57,13 @@ public class ImageResizer {
     private void ensureImageType(String imageType) {
         String imageTypeUpper = imageType.toUpperCase();
         if (!Stream.of(PROPER_IMG_TYPES).anyMatch(p -> p.equals(imageTypeUpper))) {
-            throw new ArgumentException("imageType");
+            throw new IllegalArgumentException("imageType");
         }
     }
 
     private void ensureSizeMultiplier(int sizeMultiplier) {
         if (sizeMultiplier < 1 || sizeMultiplier > 200) {
-            throw new ArgumentException("sizeMultiplier");
+            throw new IllegalArgumentException("sizeMultiplier");
         }
     }
 }
