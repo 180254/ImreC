@@ -6,6 +6,7 @@ var url = require('url');
 
 // credits radamus @ github
 // https://github.com/amgnet-weeia/awslab4
+// license: unknown
 var readJson = function (fileName) {
     if (!fs.existsSync(fileName)) {
         throw new Error('unable to open file: ' + fileName);
@@ -16,7 +17,8 @@ var readJson = function (fileName) {
 };
 
 // credits: friends @ stackoverflow
-// http://stackoverflow.com/posts/2117523/revisions
+// http://stackoverflow.com/a/2117523
+// license: https://creativecommons.org/licenses/by-sa/3.0/
 var uuid = function () {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
         var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
@@ -25,13 +27,15 @@ var uuid = function () {
 };
 
 // credits: friends @ stackoverflow
-// http://stackoverflow.com/questions/1349404/generate-a-string-of-5-random-characters-in-javascript
+// http://stackoverflow.com/a/27747377
+// license: https://creativecommons.org/licenses/by-sa/3.0/
 var random2 = function (bytes) {
     return crypto.randomBytes(bytes).toString('hex');
 };
 
 // credits: friends @ stackoverflow
-// http://stackoverflow.com/questions/728360/most-elegant-way-to-clone-a-javascript-object
+// http://stackoverflow.com/a/728694
+// license: https://creativecommons.org/licenses/by-sa/3.0/
 var clone = function (obj) {
     var copy;
 
@@ -67,7 +71,8 @@ var clone = function (obj) {
 };
 
 // credits: friends @ stackoverflow
-// http://stackoverflow.com/questions/10183291/how-to-get-the-full-url-in-express
+// http://stackoverflow.com/a/15922426
+// license: https://creativecommons.org/licenses/by-sa/3.0/
 var fullUrl = function (req) {
     if (!req) return null;
     return url.format({
@@ -78,7 +83,8 @@ var fullUrl = function (req) {
 };
 
 // credits: friends @ stackoverflow
-// http://stackoverflow.com/questions/10073699/pad-a-number-with-leading-zeros-in-javascript
+// http://stackoverflow.com/a/10073788
+// license: https://creativecommons.org/licenses/by-sa/3.0/
 var pad = function (n, width, z) {
     z = z || '0';
     n = n + '';
