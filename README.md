@@ -4,3 +4,5 @@
   
 <img src="screenshot1.PNG?raw=true" alt="ImreC-Cc screenshot1" width="650">  
 <img src="screenshot2.PNG?raw=true" alt="ImreC-Wr screenshot2" width="650">
+  
+<sub>configuration&amp;run: configuration.txt</sub> 
